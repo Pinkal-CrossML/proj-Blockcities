@@ -1,0 +1,627 @@
+
+
+body {
+  font-family: "Poppins";
+}
+
+.open-master-record {
+  padding: 10px;
+  margin: 5px;
+  background-color: silver;
+  border-radius: 8px;
+  margin-top: 30px;
+}
+
+.auction-image {
+  width: 100%;
+  height: 220px;
+  padding-bottom: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  @media (max-width: 1100px) {
+    margin-left: 0;
+  }
+  @media (max-width: 500px) {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.limited-master-record {
+  padding: 10px;
+  margin: 5px;
+  background-color: gold;
+  border-radius: 8px;
+  margin-top: 30px;
+}
+
+.normal-record {
+  margin-top: 30px;
+}
+
+.edition-badge {
+  background: #3e3e3e;
+  border-radius: 8px;
+  margin: 24px 0px 24px 20px;
+  color: #ffffff;
+  padding: 4px 8px;
+  text-align: center;
+  display: inline-block;
+}
+
+.auction-render-card {
+  min-width: 200px;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0px 2px 6px rgba(0, 0, 0, 0.1));
+  border-radius: 12px;
+  // border: 0px;
+  overflow: hidden;
+  margin-right: 40px;
+  
+ 
+
+  .ant-card-body {
+    display: flex;
+    // height: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+    text-align: left;
+
+    background: #1b214f;
+    border-radius: 0;
+  }
+
+  .bids {
+    padding: 0px 24px 24px 24px;
+  }
+
+  .ant-statistic {
+    margin-bottom: 0px !important;
+    font-size: 16px !important;
+  }
+
+  .create-statistic .ant-statistic-content {
+    font-size: 16px !important;
+    line-height: 16px !important;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .create-statistic .ant-statistic-title {
+    display: none;
+  }
+
+  .ant-card-meta-title {
+    font-size: 20px;
+    font-weight: 600;
+    padding: 24px 24px 0px 24px;
+    white-space: normal !important;
+    min-height: 55px;
+  }
+  .info-message {
+    opacity: 0.7;
+    font-size: 12px;
+    line-height: 12px;
+
+    &__main {
+      font-size: 16px;
+      line-height: 20px;
+      color: @accent-color !important;
+      margin: 0;
+      white-space: nowrap;
+    }
+  }
+
+  .ant-avatar.ant-avatar-circle,
+  h4 {
+    margin-right: 8px;
+  }
+
+  .ant-card-meta-description {
+    // padding-bottom: 10px;
+  }
+
+  .ant-card-meta {
+    width: 100%;
+    h4 {
+      opacity: 0.7;
+    }
+  }
+
+  .ant-image {
+    display: block;
+  }
+
+  .card-art-info {
+    // background: @grey-100;
+    background: #1b214f !important;
+    border-radius: 0 0 12px 12px;
+    width: 100%;
+    height: 100%;
+
+    .pack-gray-wrapper,
+    .auction-gray-wrapper {
+      padding: 16px;
+      border-radius: 12px;
+      background: @grey-60;
+      height: calc(100% - 64px);
+    }
+
+    .auction-gray-wrapper {
+      height: 72%;
+      background-color: #1b214f;
+      padding-top: 0% !important;
+    }
+
+    .card-artist-info {
+      margin-bottom: 16px;
+
+      &--pack {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .pack-creator-info {
+          display: flex;
+          align-items: center;
+          width: 60%;
+        }
+
+        .pack-creator-name {
+          font-family: Inter, sans-serif;
+          font-size: 14px;
+          line-height: 14px;
+          width: calc(100% - 42px);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        & + .art-content-wrapper {
+          border-radius: 8px;
+          height: fit-content;
+          overflow: hidden;
+        }
+      }
+
+      .artist-name {
+        font-size: 14px;
+      }
+
+      &__subtitle {
+        display: flex;
+        align-items: center;
+        padding: 0 15px;
+
+        height: 30px;
+        border: 1px solid @grey-50;
+        border-radius: 25px;
+
+        p {
+          font-size: 14px;
+          line-height: 17px;
+          color: @grey-20;
+          margin: 0;
+        }
+      }
+    }
+
+    .art-name {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      margin-top: 20px;
+      font-size: 24px;
+      line-height: 32px;
+      font-weight: 600;
+    }
+
+    .auction-info-container {
+      padding: 16px 0;
+    }
+
+    .art-auction-info {
+      padding: 16px 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 5px;
+
+      span {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        color: @accent-color !important;
+        opacity: 1;
+      }
+
+      &__left-side {
+        display: flex;
+        align-items: center;
+        width: calc(100% - 100px);
+
+        & > img {
+          margin-right: 8px;
+          max-width: 240px;
+          max-height: 240px;
+          width: auto;
+          height: auto;
+        }
+
+        & > span {
+          font-size: 16px;
+          line-height: 24px;
+          width: calc(100% - 28px);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+
+      &__right-side {
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        color: @accent-color !important;
+        border: 1px solid @accent-color;
+        box-shadow: 0 0 24px rgba(26, 26, 26, 0.12);
+        border-radius: 8px;
+
+        & > img {
+          margin-right: 10px;
+        }
+
+        & > span {
+          font-size: 14px;
+          line-height: 14px;
+        }
+      }
+    }
+  }
+
+  .card-bid-info {
+    width: 100%;
+    padding: 16px;
+    min-height: 78px;
+    .usd {
+      padding-bottom: 5px;
+      opacity: 0.7;
+      font-size: 16px !important;
+      line-height: 16px !important;
+      margin-left: 0px;
+     
+
+    }
+  }
+}
+
+.small {
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cd-container {
+  background: linear-gradient(270deg, #616774 7.29%, #403f4c 100%);
+  box-shadow: inset 0px 4px 20px rgba(0, 0, 0, 0.3);
+  border-radius: 0px 0px 8px 8px;
+  margin-top: 20px;
+  padding: 24px;
+}
+
+.cd-title {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.cd-time {
+  color: white;
+}
+
+.art-content-wrapper {
+  height: 240px !important;
+}
+
+.card-button {
+
+  width: 80px;
+  height: 30px;
+  right:20px;
+  position: absolute;
+  border: 4px solid ;
+  border-radius: 20px;
+  background-image: linear-gradient(to right, rgb(22, 200, 6), rgb(241, 238, 36)) 1;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+
+.white-grad {
+  text-decoration:none;
+  color: #ffffff !important;
+  padding: 10px;
+  display: inline-block;
+  position: relative;
+  z-index: 0;
+  float:right;
+
+  font-weight: 500;
+    font-size: 130%;
+    line-height: 20px;
+    width: 40%;
+    text-align: center;
+}
+.buy-now-btn{
+  position:absolute;
+  margin-top: 90%;
+  margin-left: -60%;
+
+}
+.white-grad:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  padding: 2px;
+  border-radius: 40px;
+  background: linear-gradient(to right, rgb(22, 200, 6), rgb(255, 240, 36));
+  -webkit-mask: 
+     linear-gradient(#fff 0 0) content-box, 
+     linear-gradient(#fff 0 0);
+          mask: 
+     linear-gradient(#fff 0 0) content-box, 
+     linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+
+}
+
+.white-grad-nav{
+  text-decoration:none;
+  color: #ffffff !important;
+  padding-bottom: 6%;
+  display: inline-block;
+  position: absolute;
+  z-index: 0;
+  float:right;
+
+  font-weight: 500;
+    font-size: 115%;
+    line-height: 20%;
+    width: 50%;
+    margin-left: -70%;
+    margin-top: 75%;
+    text-align: center;
+}
+
+.white-grad-nav:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  padding: 2px;
+  border-radius: 40px;
+  background: linear-gradient(to right, rgb(22, 200, 6), rgb(241, 238, 36));
+  -webkit-mask: 
+     linear-gradient(#fff 0 0) content-box, 
+     linear-gradient(#fff 0 0);
+          mask: 
+     linear-gradient(#fff 0 0) content-box, 
+     linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+
+}
+
+
+
+.avtar{
+  text-align: right;
+  position: absolute;
+  bottom: -5%;
+  right: 40px;
+  margin-bottom: 140px;
+}
+.avta-img{
+  height: 70px;
+    width: 100%;
+}
+
+.citybtn{
+  // background-color: #1B214F !important;
+  // border: #fff !important;
+//   width: 190px;
+// height: 48px;
+  border: 1px solid #474F8B !important;
+box-sizing: border-box;
+filter: drop-shadow(0px 4px 40px rgba(136, 122, 166, 0.16)) !important;
+border-radius: 48px !important;
+
+}
+
+.citybtn-text{
+  font-family: 'Poppins' !important;
+
+
+background: -webkit-gradient(linear, left top, left bottom, from(#FF853D ), to(#EDDC46 ));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+align-items: center;
+letter-spacing: 0.02em;
+
+text-shadow: 0px 13px 17px rgba(140, 213, 105, 0.2);
+}
+
+.light-blue{
+ color: rgba(106, 112, 164, 1)
+}
+
+.ciye-cart{
+  margin-top: 2px;
+  margin-left: 27px;
+
+}
+.cuntry{
+  margin-left: 27px;
+}
+.sol{
+
+color: #8EC759;
+
+}
+.place-bid{
+  // text-align: right;
+  border-radius: 40px;
+  background: -webkit-gradient(linear, left top, left bottom, from(#FF853D ), to(#EDDC46 ));
+  box-shadow: 0px 13px 17px rgba(140, 213, 105, 0.2);
+  }
+.map-avrat-logo{
+  width: 5%;
+  position: absolute;
+    margin-top: 34%;
+    margin-left: 5%;
+}
+
+main{
+  margin-left: 0px;
+}
+
+.Connected .card
+{
+  background-color: rgba(27, 33, 79, 1 ) !important;
+
+  border-radius: 18px !important;
+}
+
+.Connected .border {
+    border: 1px solid rgba(27, 33, 79, 1 ) !important;
+}
+
+
+.place-bid-two{
+  text-align: right;
+  border-radius: 40px;
+  margin-bottom: -13%;
+  background: -webkit-gradient(linear, left top, left bottom, from(#FF853D ), to(#EDDC46 ));
+  width: 65% !important;
+  margin-bottom: -2%;
+  box-shadow: 0px 13px 17px rgba(140, 213, 105, 0.2);
+ 
+}
+
+.place-bid-two-next{
+  text-align: right;
+  border-radius: 40px;
+  margin-bottom: -13%;
+  background: #232A61;
+  width: 65% !important;
+  margin-bottom: -2%;
+  
+
+}
+
+.top-cards{
+  background:#1b214f !important;
+  border-radius: 18px;
+  // height: 215px;
+  // margin-right: 13%;
+  // margin-left: -1%;
+}
+.star{
+  font-family: Poppins;
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 24px;
+color: #BABEE1;
+
+}
+
+.glax{
+  width:100%;
+}
+
+.min-card{
+  background: #ffffff00;
+}
+
+.nav-back-icon{
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  background: #232A61;
+  width: 80% !important;
+  height: 60px;
+}
+
+// nft cards 
+
+.Connected .border {
+  border: 1px solid rgba(27, 33, 79, 1 ) !important;
+}
+
+
+
+.sol-color{
+
+  background: -webkit-linear-gradient(rgba(40, 245, 228, 0.726), rgb(50, 201, 228));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+.Virtual-Land{
+  text-align: right;
+  border-radius: 40px;
+  margin-bottom: -13%;
+  background: -webkit-gradient(linear, left top, left bottom, from(#3C5FFD ), to(#7E55EC ));
+  width: 65% !important;
+  margin-bottom: -2%;
+  box-shadow: 0px 13px 17px rgba(140, 50, 243, 0.2);
+ 
+}
+.assets-btn{
+  
+}
+//  nft cards end 
+
+.white-grad-o {
+  text-decoration:none;
+  color: #ffffff !important;
+  padding: 10px;
+  display: inline-block;
+  position: relative;
+  z-index: 0;
+  float:right;
+
+  font-weight: 500;
+    font-size: 130%;
+    line-height: 20px;
+    width: 40%;
+    text-align: center;
+}
+.buy-now-btn{
+  position:absolute;
+  margin-top: 90%;
+  margin-left: -60%;
+
+}
+.white-grad-o:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  padding: 2px;
+  border-radius: 40px;
+  background: linear-gradient(to right, rgb(#3C5FFD), rgb(#7E55EC));
+  -webkit-mask: 
+     linear-gradient(#fff 0 0) content-box, 
+     linear-gradient(#fff 0 0);
+          mask: 
+     linear-gradient(#fff 0 0) content-box, 
+     linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+
+}
