@@ -85,7 +85,7 @@ export const AppLayout = React.memo((props: any) => {
                     <div className="col-md-6 ps-2 pt-4">
                       <div className="">
                         <div className='row gx-0'>
-                          <div className='col-md-2'>
+                          <div className='col-md-2 col-sm-2'>
                           <img src={'/mainavtar.png'} style={{width:'100%'}}/>
                           </div>
                           <div className='col-md-10'>
@@ -138,7 +138,7 @@ export const AppLayout = React.memo((props: any) => {
                   
                 </div>
               </div>
-              <div className="col-3 Connected">
+              <div className="col-3 col-sm-12 col-lg-3 Connected">
                 <div className='card border'>
                   <div className="card-body pb-1">
                   <h5 className="text-white p-2 fs-6 pb-3 mx-4">NFT Details</h5>
@@ -168,7 +168,7 @@ export const AppLayout = React.memo((props: any) => {
                  </div>
             
 
-                <div className="col-3 Connected ">
+                <div className="col-3 col-sm-12 col-lg-3 Connected ">
                 <div className='card border'>
                   <div className="card-body pb-5">
                     <h5 className="text-white fs-6 p-2 pb-3 mx-4">Get Connected</h5>
@@ -270,6 +270,9 @@ export const AppLayout = React.memo((props: any) => {
                         <img className="glax rounded" src={'/white.jpg'} />
                         
                       </p>
+                      <div className='text-white pb-2'>
+                      Florida
+                      </div>
                       
                       <h5 className=" fs-5 sol-color" >
                         <div className=''></div> 300 SOL</h5>
@@ -283,11 +286,11 @@ export const AppLayout = React.memo((props: any) => {
                   </div>
                 </div> */}
 
-
-
               {/* nft card send */}
 
+
               {/* display card  */}
+
               {/* <div className="col-3 Connected  pt-4">
                 <div className='card border'>
                   <div className="card-body pb-5 ">
@@ -297,13 +300,13 @@ export const AppLayout = React.memo((props: any) => {
                         type="button"
                         className=" btn btn-rounded  pt-2 pb-1"
                       >
-                        <h5 className='text-white fs-6'>Virtual Land</h5>
+                        <h5 className='text-white fw-normal fs-6'>Virtual Land</h5> 
                       </button>
                     </div>
                     <div className=" text-center mt-2 pb-0  ">
                     <Link
-                className="white-grad-o me-5 ms-5 mt-4 fs-6 w-75"
-                style={{height: '120%'}}
+                className="white-grad-o me-5 ms-5 mt-4 fw-normal fs-6 w-75"
+                
                 to={`/auction/`}
               >
                 Available Assets
@@ -311,8 +314,8 @@ export const AppLayout = React.memo((props: any) => {
                     </div>
                     <div className=" text-center mt-2 pb-0  ">
                     <Link
-                className="white-grad-o me-5 ms-5 mt-4 fs-6 w-75"
-                style={{height: '120%'}}
+                className="white-grad-o me-5 ms-5 fw-normal mt-4 fs-6 w-75"
+               
                 to={`/auction/`}
               >
                 Proposed Upgrades
@@ -320,8 +323,8 @@ export const AppLayout = React.memo((props: any) => {
                     </div>
                     <div className=" text-center mt-2 pb-0  ">
                     <Link
-                className="white-grad-o me-5 ms-5 mt-4 fs-6 w-75"
-                style={{height: '120%'}}
+                className="white-grad-o me-5 ms-5 fw-normal mt-4 fs-6 w-75"
+             
                 to={`/auction/`}
               >
                 Architecture
@@ -329,8 +332,8 @@ export const AppLayout = React.memo((props: any) => {
                     </div>
                     <div className=" text-center mt-2 pb-0  ">
                     <Link
-                className="white-grad-o me-5 ms-5 mt-4 fs-6 w-75"
-                style={{height: '120%'}}
+                className="white-grad-o me-5 ms-5 mt-4 fw-normal fs-6 w-75"
+             
                 to={`/auction/`}
               >
                 Art

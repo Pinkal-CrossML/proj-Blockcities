@@ -1,4 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import {
+  h3ToChildren,
+  getRes0Indexes,
+  kRing,
+  h3ToGeo,
+  h3ToGeoBoundary,
+} from 'h3-js';
+import { h3SetToFeatureCollection } from 'geojson2h3';
 import { useParams } from 'react-router-dom';
 import { Button, Card, Carousel, Col, List, Row, Skeleton } from 'antd';
 import { AuctionCard } from '../../components/AuctionCard';
@@ -275,9 +285,228 @@ export const AuctionView = () => {
       </Row>
     );
   } else {
+    const h3indexes = (resolution, map) => {
+      // Get all of the base cells for the initial iteration
+      const baseCells = getRes0Indexes();
+      const hexes = {};
+      var hex_index = 0;
+      const bounds = map.getBounds();
+
+      for (const index of baseCells) {
+        var children = Object.values({ ...h3ToChildren(index, resolution) });
+
+        children.forEach(element => {
+          hex_index += 1;
+          hexes[element.toString().toLowerCase()] = hex_index;
+        });
+      }
+
+      return hexes;
+    };
+
+    mapboxgl.accessToken =
+      'pk.eyJ1IjoiamFnZGlzaDEyMSIsImEiOiJja3VhNmg1eHcwYWx3MnFteGdueXdlNGVmIn0.-TCYcPKARKOYmOJ5wFDETg';
+
+    const mapContainer = useRef(null);
+    const map = useRef(null);
+    const [lng, setLng] = useState(-70.9);
+    const [lat, setLat] = useState(42.35);
+    const [zoom, setZoom] = useState(9);
+
+    const fly = (map, geotoh3) => {
+      map.flyTo({
+        center: [geotoh3[1], geotoh3[0]],
+        zoom: 8,
+        essential: true,
+      });
+    };
+
+    useEffect(() => {
+      const map = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/light-v9',
+        center: [lng, lat],
+        zoom: zoom,
+      });
+      map.setRenderWorldCopies(false);
+      map.setMaxBounds([
+        [-180, -90],
+        [180, 90],
+      ]);
+      var hexagons = h3indexes(4, map);
+      let hoveredStateId1 = null;
+      renderHexes(map, hexagons, hoveredStateId1, '1', 5, 24);
+      if (map.current) return;
+    }, []);
+
+    const fixTransmeridian = feature => {
+      function fixTransmeridianCoord(coord) {
+        const lng = coord[0];
+        coord[0] = lng < 0 ? lng + 360 : lng;
+      }
+
+      function fixTransmeridianLoop(loop) {
+        let isTransmeridian = false;
+        for (let i = 0; i < loop.length; i++) {
+          // check for arcs > 180 degrees longitude, flagging as transmeridian
+          if (Math.abs(loop[0][0] - loop[(i + 1) % loop.length][0]) > 180) {
+            isTransmeridian = true;
+            break;
+          }
+        }
+        if (isTransmeridian) {
+          loop.forEach(fixTransmeridianCoord);
+        }
+      }
+
+      function fixTransmeridianPolygon(polygon) {
+        polygon.forEach(fixTransmeridianLoop);
+      }
+      const { type } = feature;
+      if (type === 'FeatureCollection') {
+        feature.features.map(fixTransmeridian);
+        return;
+      }
+      const { type: geometryType, coordinates } = feature.geometry;
+
+      switch (geometryType) {
+        case 'LineString':
+          fixTransmeridianLoop(coordinates);
+          return;
+        case 'Polygon':
+          fixTransmeridianPolygon(coordinates);
+          return;
+        case 'MultiPolygon':
+          coordinates.forEach(fixTransmeridianPolygon);
+          return;
+        default:
+          throw new Error(`Unknown geometry type: ${geometryType}`);
+      }
+    };
+
+    const renderHexes = (
+      map,
+      hexagons,
+      hoveredStateId1,
+      sourceIndex,
+      minzoom,
+      maxzoom,
+    ) => {
+      map.on('load', () => {
+        var tile_id = document.getElementsByClassName('tileId')[0].innerText;
+        const geotoh3 = h3ToGeo(tile_id);
+        fly(map, geotoh3);
+
+        var geojson2 = h3SetToFeatureCollection([tile_id], hex => ({
+          id: 1,
+          value: geotoh3,
+        }));
+        fixTransmeridian(geojson2);
+        // debugger
+        map.addSource('h3-hexes-highlighted' + sourceIndex, {
+          type: 'geojson',
+          data: geojson2,
+          generateId: true,
+        });
+        // debugger
+
+        map.addLayer({
+          id: 'hex-fills-highlighted' + sourceIndex,
+          type: 'fill',
+          source: 'h3-hexes-highlighted' + sourceIndex,
+          layout: {},
+          minzoom: minzoom,
+          maxzoom: maxzoom,
+          paint: {
+            'fill-color': [
+              'case',
+              ['boolean', ['feature-state', 'highlight'], false],
+              '#84C446',
+              'rgba(193, 98, 123,0.2)',
+            ],
+          },
+        });
+        // function example() {
+        const h = tile_id;
+        const k = 4;
+        // debugger
+        const kring = kRing(h, k);
+        console.log(kring);
+        // return kring;
+        // }
+        // example()
+
+        var geojson3 = h3SetToFeatureCollection(Object.values(kring), hex => ({
+          id: 1,
+          value: geotoh3,
+        }));
+        fixTransmeridian(geojson3);
+        // debugger
+        map.addSource('h3-hexes-kring' + sourceIndex, {
+          type: 'geojson',
+          data: geojson3,
+          generateId: true,
+        });
+        // debugger
+        map.addLayer({
+          'id': 'hex-borders-kring' + sourceIndex,
+          'type': 'line',
+          'source': 'h3-hexes-kring' + sourceIndex,
+          'layout': {},
+          'minzoom': minzoom,
+          'maxzoom': maxzoom,
+
+          'paint': {
+            'line-color': 'rgba(193, 98, 123,0.2)',
+            'line-width': 1
+          }
+        });
+        map.addLayer({
+          id: 'hex-fills-kring' + sourceIndex,
+          type: 'fill',
+          source: 'h3-hexes-kring' + sourceIndex,
+          layout: {},
+          minzoom: minzoom,
+          maxzoom: maxzoom,
+          paint: {
+            'fill-color': [
+              'case',
+              ['boolean', ['feature-state', 'highlight'], true],
+              '#DCAFB9',
+              'rgb(220,175,185)',
+            ],
+
+            'fill-opacity': [
+              'case',
+              ['boolean', ['feature-state', 'hover'], false],
+              0.2,
+              0.1,
+            ],
+          },
+        });
+        map.on('mousemove', 'hex-fills-kring' + 1, e => {
+          map.getCanvas().style.cursor = 'pointer';
+
+          if (e.features.length > 0) {
+            if (hoveredStateId1 !== null) {
+              map.setFeatureState(
+                { source: 'h3-hexes-kring' + 1, id: hoveredStateId1 },
+                { hover: false },
+              );
+            }
+
+            hoveredStateId1 = e.features[0].id;
+            map.setFeatureState(
+              { source: 'h3-hexes-kring' + 1, id: hoveredStateId1 },
+              { hover: true },
+            );
+          }
+        });
+      });
+    };
     return (
       <Row ref={ref} gutter={[48, 0]}>
-        <Col className={'col-6 img-cont-300 ps-3'}>
+        <Col className={'col-6 col-md-12 col-sm-12 col-lg-6 img-cont-300 ps-3'}>
           <div
             className="row px-2"
             style={{
@@ -363,9 +592,9 @@ export const AuctionView = () => {
           )} */}
         </Col>
 
-        <div className="col-3 Connected px-4 ">
+        <div className="col-3 col-sm-12 col-lg-3 Connected px-4 ">
           <div className="card border">
-            <div className="card-body py-4 px-5">
+            <div className="card-body py-3 px-5">
               <h5 className={'text-white'}>
                 {nftCount === 1 ? 'NFT' : 'COLLECTION'} Details
               </h5>
@@ -406,9 +635,9 @@ export const AuctionView = () => {
                 <div className={''}>
                   <List grid={{ column: 4 }}>
                     {attributes.map((attribute, index) => (
-                      <p className="text-white mt-3 text-start mb-4 me-5">
-                        <b>{attribute.trait_type}: </b>
-                        {attribute.value}
+                      <p className="text-white mt-3 text-start  me-5">
+                        <b>{attribute.trait_type}:</b>
+                        <p className="tileId text-white"> {attribute.value}</p>
                       </p>
                     ))}
                   </List>
@@ -418,7 +647,7 @@ export const AuctionView = () => {
           </div>
         </div>
 
-        <div className="col-3 Connected px-4 pe-5">
+        <div className="col-3 col-sm-12 col-lg-3 Connected px-4 pe-5">
           <div className="card border">
             <div className="card-body py-4">
               <h5 className="text-white fs-6 p-2 pb-3 mx-4">Get Connected</h5>
@@ -448,19 +677,25 @@ export const AuctionView = () => {
         <div className="col-12 Connected pe-5">
           <div className="card border pt-5 mt-5 pb-5 ">
             <div>
-              <img className="main-map pe-5 ps-5" src={'/map.png'} />
+              <div
+                ref={mapContainer}
+                className="map-container main-map "
+                style={{ height: '416px', width: '1550px' }}
+              />
             </div>
 
-            <img className="map-avrat-logo" src={'/map-logo.png'} />
+            {/* <img className="map-avrat-logo" src={'/map-logo.png'} /> */}
 
-            <div className='position-absolute w-25 pt-3'style={{marginLeft:'75%'}}>
-            <div className="place-bid-two  text-center  mt-3 pb-0">
+            <div
+              className="position-absolute w-25 pt-3"
+              style={{ marginLeft: '75%' }}
+            >
+              <div className="place-bid-two  text-center  mt-3 pb-0">
                 <button type="button" className=" btn btn-rounded  pt-2 pb-1">
                   <h5 className="text-white">Go to Virtual Earth</h5>
                 </button>
               </div>
             </div>
-            
 
             <div>
               <Link
