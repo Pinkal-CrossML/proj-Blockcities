@@ -679,12 +679,12 @@ export const AuctionView = () => {
             <div>
               <div
                 ref={mapContainer}
-                className="map-container main-map "
-                style={{ height: '416px', width: '1550px' }}
+                className="map-container rounded main-map ms-5"
+                style={{ height: '416px', width: '1510px' }}
               />
             </div>
 
-            {/* <img className="map-avrat-logo" src={'/map-logo.png'} /> */}
+            <img className="map-avrat-logo" src={'/map-logo.png'} />
 
             <div
               className="position-absolute w-25 pt-3"
