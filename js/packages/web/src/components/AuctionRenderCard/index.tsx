@@ -59,12 +59,10 @@ export const AuctionRenderCard = (props: AuctionCard) => {
       </div>
       <div className="card-bid-info">
         <span className={'text-uppercase info-message'}>{status}</span>
-        {/* <a className="white-grad"> Buy Now{auctionView.auction.pubkey}</a> */}
         <Link className="white-grad "
-                      // key={auctionView.auction.pubkey}
                       to={`/auction/${auctionView.auction.pubkey}`}
                     >Buy Now</Link>
-        {/* <button className="card-button border-image-source" type="button">Buy Now</button> */}
+        
         <AmountLabel
           containerStyle={{ flexDirection: 'row' }}
           title={status}

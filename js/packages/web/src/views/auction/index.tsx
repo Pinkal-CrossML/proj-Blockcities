@@ -592,7 +592,7 @@ export const AuctionView = () => {
           )} */}
         </Col>
 
-        <div className="col-3 col-sm-12 col-lg-3 Connected px-4 ">
+        <div className="col-3 col-sm-12 col-lg-3 col-mb-12 Connected px-4 ">
           <div className="card border">
             <div className="card-body py-3 px-5">
               <h5 className={'text-white'}>
@@ -658,12 +658,14 @@ export const AuctionView = () => {
               </div>
 
               <div className="place-bid-two-next text-center mt-4 pb-0">
+              <Link to={`/`} key={'explore'}>
                 <button
                   type="button"
                   className="text-white costom btn btn-rounded pt-3 "
                 >
                   <h5 className="text-white">How it Works</h5>
                 </button>
+                </Link>
               </div>
 
               <div className="place-bid-two-next text-center mt-4 mb-1">
@@ -674,13 +676,13 @@ export const AuctionView = () => {
             </div>
           </div>
         </div>
-        <div className="col-12 Connected pe-5">
+        <div className="col-12 Connected  pe-5">
           <div className="card border pt-5 mt-5 pb-5 ">
             <div>
               <div
                 ref={mapContainer}
-                className="map-container rounded main-map ms-5"
-                style={{ height: '416px', width: '1510px' }}
+                className="map-container col-md-12 rounded main-map ms-5"
+                style={{ height: '500px', width: '94%' }}
               />
             </div>
 
@@ -716,6 +718,19 @@ export const AuctionView = () => {
                 SOLD
               </div>
             </div>
+            {/* <div className="container">
+  <div className="row">
+    <div className="col">
+      Column
+    </div>
+    <div className="col">
+      Column
+    </div>
+    <div className="col">
+      Column
+    </div>
+  </div>
+</div> */}
           </div>
         </div>
       </Row>

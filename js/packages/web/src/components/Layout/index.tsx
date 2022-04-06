@@ -82,7 +82,7 @@ export const AppLayout = React.memo((props: any) => {
                     <div className="col-md-6 p-4 ">
                       <img src={'/town.png'} className="card-img" alt="..." />
                     </div>
-                    <div className="col-md-6 ps-2 pt-4">
+                    <div className="col-md-6 col-sm-12 col-md-12 col-lg-6 ps-2 pt-4">
                       <div className="">
                         <div className='row gx-0'>
                           <div className='col-md-2 col-sm-2'>
@@ -135,7 +135,7 @@ export const AppLayout = React.memo((props: any) => {
                       </div>
                     </div>
                   </div>
-                  
+        
                 </div>
               </div>
               <div className="col-3 col-sm-12 col-lg-3 Connected">
@@ -182,12 +182,15 @@ export const AppLayout = React.memo((props: any) => {
                     </div>
 
                     <div className="place-bid-two-next text-center mt-4 pb-0">
+                    <Link to={``} key={'explore'}>
                       <button
                         type="button"
                         className="text-white  btn btn-rounded pt-3 "
                       >
+                        
                         <h5 className="text-white">How it Works</h5>
                       </button>
+                      </Link>
                     </div>
 
                     <div className="place-bid-two-next text-center mt-4 pb-0">
@@ -343,8 +346,8 @@ export const AppLayout = React.memo((props: any) => {
                 
                     </div>
                   </div>
-                </div> */}
-              
+                </div>
+               */}
 
 
               {/* display card end */}

@@ -26,7 +26,7 @@ export const SalesListView = () => {
   const { isLoading } = useMeta();
   const { connected } = useWallet();
   const { auctions, hasResaleAuctions } = useAuctionsList(activeKey);
-
+  console.log('auctions', auctions)
   return (
     <>
       <Banner
@@ -73,6 +73,7 @@ export const SalesListView = () => {
                   [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
                 {!isLoading &&
                   auctions.map(auction => (
+                      
                     // <Link
                     //   key={auction.auction.pubkey}
                     //   to={`/auction/${auction.auction.pubkey}`}
