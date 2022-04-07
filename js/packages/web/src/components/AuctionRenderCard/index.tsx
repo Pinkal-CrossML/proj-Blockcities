@@ -20,12 +20,27 @@ export const AuctionRenderCard = (props: AuctionCard) => {
   const art = useArt(id);
   const creators = useCreators(auctionView);
   const name = art?.title || ' ';
+  
 
   const tokenInfo = useTokenList().mainnetTokens.filter(m=>m.address == auctionView.auction.info.tokenMint)[0]
   const { status, amount } = useAuctionStatus(auctionView);
 
+  debugger
+  // const artUri: string | string = art.uri
+  // const fetchMeta = async () => {
+  //   await fetch(artUri).then(res => res.json()).then(data => {
+  //     console.log(name);
+  //     console.log(data.attributes)
+  //     const attr = data.attributes
+  //     const newdata = attr.filter(e => e.value.includes("Regenerative"));
+  //     console.log(newdata,'Regenerative');
+  //   });
+  // }
+  // fetchMeta()
+
+  
   const card = (
-    <Card hoverable={true} className={`auction-render-card mb-4`} bordered={false}>
+    <Card hoverable={true} className={`auction-render-card col-3 mb-4`} bordered={false}>
       <div className={'card-art-info p-2'}>
         <div className="auction-gray-wrapper">
           <div className={'card-artist-info'}>
@@ -57,6 +72,7 @@ export const AuctionRenderCard = (props: AuctionCard) => {
           
         </div>
       </div>
+      
       <div className="card-bid-info">
         <span className={'text-uppercase info-message'}>{status}</span>
         <Link className="white-grad "

@@ -13,7 +13,7 @@ import { AuctionRenderCard } from '../../../../components/AuctionRenderCard';
 
 const { TabPane } = Tabs;
 const { Content } = Layout;
-
+var newdata;
 export enum LiveAuctionViewState {
   All = '0',
   Participated = '1',
@@ -26,7 +26,38 @@ export const SalesListView = () => {
   const { isLoading } = useMeta();
   const { connected } = useWallet();
   const { auctions, hasResaleAuctions } = useAuctionsList(activeKey);
-  console.log('auctions', auctions)
+
+  const [myArray, setMyArray] = useState<any[]>([]);
+
+  const activateLasers =(filter_type)=>{
+    setMyArray([])
+    console.log('auctions', auctions)
+      auctions.forEach(auction => {
+        
+        const artUri = auction.thumbnail.metadata.info.data.uri
+        const fetchMeta = async () => {
+          await fetch(artUri).then(res => res.json()).then(data => {
+          const attr = data.attributes
+          console.log('attr', attr)
+          newdata = attr.filter(e => e.value.includes(filter_type));
+          console.log('newdata.length', newdata.length)
+          
+          if (newdata.length>0){
+            // let newArr = [...auction]; // copying the old datas array
+            // setMyArray(newArr)
+            
+            setMyArray(arr => [...arr, auction]);
+            console.log('myArray', myArray)
+          } 
+          // console.log('newdata', newdata)
+          // setCount(newdata)
+          });
+      }
+      fetchMeta()
+
+    });
+  }
+    
   return (
     <>
       <Banner
@@ -40,7 +71,7 @@ export const SalesListView = () => {
         <Content style={{ display: 'flex', flexWrap: 'wrap' }}>
           <Col style={{ width: '100%', marginTop: 32 }}>
             <Row>
-              <Tabs
+              {/* <Tabs
                 activeKey={activeKey}
                 onTabClick={key => setActiveKey(key as LiveAuctionViewState)}
               >
@@ -65,15 +96,110 @@ export const SalesListView = () => {
                     key={LiveAuctionViewState.Participated}
                   ></TabPane>
                 )}
-              </Tabs>
+              </Tabs> */}
             </Row>
+            <div className="">
+                  <h5 className="fw-bold star fs-5">
+                    <span>⭐</span> Top Collections
+                  </h5>
+                </div>
+                <div className="row mt-5">
+                  <div className="col me-4">
+                    <div
+                      className="min-card mb-3 "
+                      style={{ maxWidth: '18rem;' }}
+                    >
+                      <div className="card-body top-cards">
+                        <p className="card-text">
+                          <img className="glax" src={'/glax.png'} />
+                          <div className="lock-mid text-center">
+                            <img src={'/lock.png'} />
+                          </div>
+                        </p>
+                        <div className="text-center">
+                        <button className='bg-transparent border-0' onClick={()=>activateLasers('FeaturedCities')}>
+                          <h5 className='text-white fs-6'>
+                            Featured Cities
+                          </h5>
+                        </button>
+                        </div>
+                        
+                        <h6 className="text-center">Virtual Earth</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col me-4">
+                    <div className="card-body top-cards">
+                      <p className="card-text">
+                        <img className="glax" src={'/rege.png'} />
+                        <div className="lock-mid text-center">
+                          <img src={'/lock.png'} />
+                        </div>
+                      </p>
+                      <div className="text-center">
+                        <button className='bg-transparent border-0' onClick={()=>activateLasers('Regenerative')}>
+                          <h5 className='text-white fs-6'>
+                            Featured Cities
+                          </h5>
+                        </button>
+                        </div>
+
+                      
+                      
+                      <h6 className="text-center">NFT’s for Impact</h6>
+                    </div>
+                  </div>
+                  <div className="col me-4">
+                    <div className="card-body top-cards">
+                      <p className="card-text">
+                        <img className="glax" src={'/archi.png'} />
+                        <div className="lock-mid text-center">
+                          <img src={'/lock.png'} />
+                        </div>
+                      </p>
+
+                      <div className="text-center">
+                        <button className='bg-transparent border-0' onClick={()=>activateLasers('Architecture')}>
+                          <h5 className='text-white fs-6'>
+                          Architecture
+                          </h5>
+                        </button>
+                        </div>
+                      
+                      
+                      <h6 className="text-center">for Designing the Future</h6>
+                    </div>
+                  </div>
+                  <div className="col pe-5">
+                    <div className="card-body top-cards">
+                      <p className="card-text">
+                        <img className="glax" src={'/art.png'} />
+                        <div className="lock-mid text-center">
+                          <img src={'/lock.png'} />
+                        </div>
+                      </p>
+                      <div className="text-center">
+                        <button className='bg-transparent border-0' onClick={()=>activateLasers('Art')}>
+                          <h5 className='text-white fs-6'>
+                          Art
+                          </h5>
+                        </button>
+                        </div>
+                      
+                      
+                      <h6 className="text-center">Coming Soon</h6>
+                    </div>
+                  </div>
+                </div>
+                <h5 className="fw-bold star fs-5 py-4">
+                  <span>🔥</span> Featured
+                </h5>
             <Row>
               <div className="artwork-grid col-12 h-25">
                 {isLoading &&
                   [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
                 {!isLoading &&
-                  auctions.map(auction => (
-                      
+                  myArray.map(auction => (
                     // <Link
                     //   key={auction.auction.pubkey}
                     //   to={`/auction/${auction.auction.pubkey}`}

@@ -121,6 +121,7 @@ export const AuctionView = () => {
   const hasDescription = data === undefined || data.description === undefined;
   const description = data?.description;
   const attributes = data?.attributes;
+  
 
   const tokenInfo = useTokenList()?.mainnetTokens.filter(
     m => m.address == auction?.auction.info.tokenMint,
