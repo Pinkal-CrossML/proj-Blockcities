@@ -25,7 +25,7 @@ export const AuctionRenderCard = (props: AuctionCard) => {
   const tokenInfo = useTokenList().mainnetTokens.filter(m=>m.address == auctionView.auction.info.tokenMint)[0]
   const { status, amount } = useAuctionStatus(auctionView);
 
-  debugger
+  // debugger
   // const artUri: string | string = art.uri
   // const fetchMeta = async () => {
   //   await fetch(artUri).then(res => res.json()).then(data => {

@@ -636,8 +636,8 @@ export const AuctionView = () => {
                 <div className={''}>
                   <List grid={{ column: 4 }}>
                     {attributes.map((attribute, index) => (
-                      <p className="text-white mt-3 text-start  me-5">
-                        <b>{attribute.trait_type}:</b>
+                      <p className="text-white mt-3 text-start me-5">
+                        <b className=''>{attribute.trait_type}:</b>
                         <p className="tileId text-white"> {attribute.value}</p>
                       </p>
                     ))}

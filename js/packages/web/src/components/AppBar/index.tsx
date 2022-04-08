@@ -26,7 +26,7 @@ const getDefaultLinkActions = (connected: boolean) => {
       <div className="nav-back-icon">
         <div className='ms-5'>
           <img style={{width: '15%'}} src={'/H1.png'} />
-      <Button className="app-btn nave-list fs-5 fw-normal mb-4 ">Home</Button></div>
+      <Button className="app-btn nave-list fs-5 fw-normal mb-3 ">Home</Button></div>
       
       </div>
     </Link>,
@@ -34,46 +34,46 @@ const getDefaultLinkActions = (connected: boolean) => {
     <Link to={`/`} key={'explore'}>
       <div className='ms-5'>
       <img style={{width: '12%'}} src={'/market.png'} />
-    <Button className="app-btn nave-list fs-5 fw-normal mb-4 ">Marketplace</Button>
+    <Button className="app-btn nave-list fs-5 fw-normal mb-3 ">Marketplace</Button>
       </div>
       
   </Link>,
     <Link to={`/artworks`} key={'artwork'}>
       <div className='ms-5'>
       <img style={{width: '12%'}} src={'/activity.png'} />
-      <Button className="app-btn nave-list fs-5 fw-normal mb-4">{connected ? 'My Activity' : 'Artwork'}</Button>
+      <Button className="app-btn nave-list fs-5 fw-normal mb-3">{connected ? 'My Activity' : 'Artwork'}</Button>
       </div>
       
     </Link>,
     <Link to={""} key={'artists'}>
-      <Button className="app-btn index-nav-map fs-5 fw-normal ms-4 ">Account</Button>
+      <Button className="app-btn index-nav-map fs-5 fw-normal mb-0 ms-3 ">Account</Button>
 
     
   </Link>,
     <Link to={`/artists`} key={'artists'}>
       <div className='ms-5'>
       <img style={{width: '12%'}}  src={'/Vector.png'} />
-      <Button className="app-btn nave-list fs-5 fw-normal mb-4">My Wallet</Button>
+      <Button className="app-btn nave-list fs-5 fw-normal mb-3">My Wallet</Button>
       </div>
       
     </Link>,
     <Link to={`/artists`} key={'artists'}>
       <div className='ms-5'>
       <img style={{width: '12%'}}  src={'/settings.png'} />
-    <Button className="app-btn nave-list fs-5 fw-normal mb-4">Settings</Button>
+    <Button className="app-btn nave-list fs-5 fw-normal mb-3">Settings</Button>
       </div>
     
   </Link>,
    <Link to={`/artists`} key={'artists'}>
      <div className='ms-5'>
-   <img style={{width: '12%'}} src={'/logout.png'} />
+   <img style={{width: '8%'}} src={'/logout.png'} />
    <Button className="app-btn nave-list fs-5 fw-normal ">Logout</Button></div>
-   <div className="img-div pt-0">
-            <img className='img1 ms-4 mt-5 pt-5' src={"/Bg (1).png"} />
+   <div className="img-div pt-0 pb-4">
+            <img className='img1 ms-4 mt-5 pt-1' src={"/Bg (1).png"} />
             <img className='img2'src={"/Ornament.png"}/>
-            <img className='img3 pt-5' src={"/VIP.png"} /> 
+            <img className='img3 pt-1' src={"/VIP.png"} /> 
     
-            <Link className="white-grad  fs-6 buy-now-btn"
+            <Link className="white-grad fs-6 buy-now-btn"
                       // key={auctionView.auction.pubkey}
                       to={`/auction/`}
                     >Join Now</Link>

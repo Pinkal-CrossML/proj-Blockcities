@@ -43,14 +43,12 @@ export const SalesListView = () => {
           console.log('newdata.length', newdata.length)
           
           if (newdata.length>0){
-            // let newArr = [...auction]; // copying the old datas array
-            // setMyArray(newArr)
+
             
             setMyArray(arr => [...arr, auction]);
             console.log('myArray', myArray)
           } 
-          // console.log('newdata', newdata)
-          // setCount(newdata)
+         
           });
       }
       fetchMeta()
@@ -139,7 +137,7 @@ export const SalesListView = () => {
                       <div className="text-center">
                         <button className='bg-transparent border-0' onClick={()=>activateLasers('Regenerative')}>
                           <h5 className='text-white fs-6'>
-                            Featured Cities
+                            Regenerative
                           </h5>
                         </button>
                         </div>
@@ -167,7 +165,7 @@ export const SalesListView = () => {
                         </div>
                       
                       
-                      <h6 className="text-center">for Designing the Future</h6>
+                      <h6 className="text-center">For Designing the Future</h6>
                     </div>
                   </div>
                   <div className="col pe-5">
@@ -195,7 +193,10 @@ export const SalesListView = () => {
                   <span>🔥</span> Featured
                 </h5>
             <Row>
-              <div className="artwork-grid col-12 h-25">
+              <div className={myArray.length==1  ? "artwork-grid col-4 h-25":''
+               +(myArray.length==2 ?"artwork-grid col-8 h-25":'')
+              +(myArray.length>2?'artwork-grid col-12 h-25':'')}>
+              
                 {isLoading &&
                   [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
                 {!isLoading &&
