@@ -144,7 +144,7 @@ export const SalesListView = () => {
 
                       
                       
-                      <h6 className="text-center">NFT’s for Impact</h6>
+                      <h6 className="text-center">NFT's for Impact</h6>
                     </div>
                   </div>
                   <div className="col me-4">

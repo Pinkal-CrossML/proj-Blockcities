@@ -505,6 +505,12 @@ export const AuctionView = () => {
         });
       });
     };
+    const myfunc = () => {
+
+      const tile = document.getElementsByClassName("tileId")[0].innerText
+      const url: string | Location = `http://localhost:3001/?tile_id=${tile}`
+      window.open(url)
+    }
     return (
       <Row ref={ref} gutter={[48, 0]}>
         <Col className={'col-6 col-md-12 col-sm-12 col-lg-6 img-cont-300 ps-3'}>
@@ -694,7 +700,7 @@ export const AuctionView = () => {
               style={{ marginLeft: '75%' }}
             >
               <div className="place-bid-two  text-center  mt-3 pb-0">
-                <button type="button" className=" btn btn-rounded  pt-2 pb-1">
+                <button type="button" className=" btn btn-rounded  pt-2 pb-1" onClick={myfunc}>
                   <h5 className="text-white">Go to Virtual Earth</h5>
                 </button>
               </div>
