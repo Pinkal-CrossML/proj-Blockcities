@@ -66,7 +66,7 @@ const getDefaultLinkActions = (connected: boolean) => {
   </Link>,
    <Link to={`/artists`} key={'artists'}>
      <div className='ms-5'>
-   <img style={{width: '8%'}} src={'/logout.png'} />
+   <img style={{width: '12%'}} src={'/logout.png'} />
    <Button className="app-btn nave-list fs-5 fw-normal ">Logout</Button></div>
    <div className="img-div pt-0 pb-4">
             <img className='img1 ms-4 mt-5 pt-1' src={"/Bg (1).png"} />

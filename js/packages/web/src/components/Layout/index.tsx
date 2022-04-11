@@ -88,7 +88,7 @@ export const AppLayout = React.memo((props: any) => {
                             alt="..."
                           />
                         </div>
-                        <div className="col-md-6 col-sm-12 col-md-12 col-lg-6 ps-2 pt-4">
+                        <div className="col-md-6 col-sm-12 col-md-12 col-lg-6 ps-2 pe-0 pt-4">
                           <div className="">
                             <div className="row gx-0">
                               <div className="col-md-2 col-sm-2">
@@ -155,7 +155,7 @@ export const AppLayout = React.memo((props: any) => {
                   <div className="col-3 col-sm-12 col-lg-3 Connected">
                     <div className="card border">
                       <div className="card-body pb-1">
-                        <h5 className="text-white p-2 fs-6 pb-3 mx-4">
+                        <h5 className="text-white p-2 fs-6 pb-3 mx-4 text-center">
                           NFT Details
                         </h5>
                         <div className="place-bid-two-next text-center mt-2 pb-0">
@@ -166,7 +166,7 @@ export const AppLayout = React.memo((props: any) => {
                             <h5 className="text-white">Details</h5>
                           </button>
                         </div>
-                        <p className=" text-white mt-3 ms-5 me-5">
+                        <p className=" text-white mt-3 ms-4 me-5">
                           Blockcities is a Toolkit to Bring the Brightest Future
                           into Physical Form
                         </p>
@@ -178,7 +178,7 @@ export const AppLayout = React.memo((props: any) => {
                             <h5 className="text-white">Metadata</h5>
                           </button>
                         </div>
-                        <p className="text-white mt-3 fs-6 mb-4 ms-5 me-5">
+                        <p className="text-white mt-3 fs-6 mb-4 ms-4 me-4">
                           Tile ID: 8444a11ffffffff
                         </p>
                       </div>
@@ -188,7 +188,7 @@ export const AppLayout = React.memo((props: any) => {
                   <div className="col-3 col-sm-12 col-lg-3 Connected ">
                     <div className="card border">
                       <div className="card-body pb-5">
-                        <h5 className="text-white fs-6 p-2 pb-3 mx-4">
+                        <h5 className="text-white fs-6 p-2 pb-3 mx-4 text-center">
                           Get Connected
                         </h5>
                         <div className="place-bid-two text-center mt-3 pb-0">

@@ -102,6 +102,7 @@ export const AuctionView = () => {
   const { ref, data } = useExtendedArt(auction?.thumbnail.metadata.pubkey);
   const creators = useCreators(auction);
   const { pullAuctionPage } = useMeta();
+  const [check, setCheck] = useState(false);
   useEffect(() => {
     pullAuctionPage(id);
   }, []);
@@ -121,7 +122,6 @@ export const AuctionView = () => {
   const hasDescription = data === undefined || data.description === undefined;
   const description = data?.description;
   const attributes = data?.attributes;
-  
 
   const tokenInfo = useTokenList()?.mainnetTokens.filter(
     m => m.address == auction?.auction.info.tokenMint,
@@ -450,17 +450,17 @@ export const AuctionView = () => {
         });
         // debugger
         map.addLayer({
-          'id': 'hex-borders-kring' + sourceIndex,
-          'type': 'line',
-          'source': 'h3-hexes-kring' + sourceIndex,
-          'layout': {},
-          'minzoom': minzoom,
-          'maxzoom': maxzoom,
+          id: 'hex-borders-kring' + sourceIndex,
+          type: 'line',
+          source: 'h3-hexes-kring' + sourceIndex,
+          layout: {},
+          minzoom: minzoom,
+          maxzoom: maxzoom,
 
-          'paint': {
+          paint: {
             'line-color': 'rgba(193, 98, 123,0.2)',
-            'line-width': 1
-          }
+            'line-width': 1,
+          },
         });
         map.addLayer({
           id: 'hex-fills-kring' + sourceIndex,
@@ -506,11 +506,17 @@ export const AuctionView = () => {
       });
     };
     const myfunc = () => {
+      const tile = document.getElementsByClassName('tileId')[0].innerText;
+      const url: string | Location = `http://localhost:3001/?tile_id=${tile}`;
+      window.open(url);
 
-      const tile = document.getElementsByClassName("tileId")[0].innerText
-      const url: string | Location = `http://localhost:3001/?tile_id=${tile}`
-      window.open(url)
-    }
+
+    };
+
+    const checkShowDetails = () => {
+      setCheck(true)
+    };
+    
     return (
       <Row ref={ref} gutter={[48, 0]}>
         <Col className={'col-6 col-md-12 col-sm-12 col-lg-6 img-cont-300 ps-3'}>
@@ -521,7 +527,7 @@ export const AuctionView = () => {
               borderRadius: '3%',
             }}
           >
-            <div className="auction-view col-6 py-1">
+            <div className="auction-view col-6 ps-3">
               <Carousel
                 autoplay={false}
                 afterChange={index => setCurrentIndex(index)}
@@ -530,7 +536,7 @@ export const AuctionView = () => {
               </Carousel>
             </div>
 
-            <div className="auction-view col-6 p-2">
+            <div className="auction-view col-6 p-3">
               <div>
                 <div className="row gx-0 py-3">
                   <div className="col-md-2 ">
@@ -601,12 +607,12 @@ export const AuctionView = () => {
 
         <div className="col-3 col-sm-12 col-lg-3 col-mb-12 Connected px-4 ">
           <div className="card border">
-            <div className="card-body py-3 px-5">
-              <h5 className={'text-white'}>
+            <div className="card-body py-4 px-5">
+              <h5 className={'text-white text-center mt-2 fs-6'}>
                 {nftCount === 1 ? 'NFT' : 'COLLECTION'} Details
               </h5>
 
-              <div className="text-center px-3 mt-4 pb-0">
+              <div className="text-center mt-4 pb-0">
                 {/* <button
                         type="button"
                         className="text-white btn btn-rounded "
@@ -620,7 +626,7 @@ export const AuctionView = () => {
                 {/* </button> */}
               </div>
 
-              <p className={'text-white  text-start mt-3 me-5 '}>
+              <p className={'text-white  text-start my-4 me-5 '}>
                 {hasDescription && <Skeleton paragraph={{ rows: 3 }} />}
                 {description ||
                   (winnerCount !== undefined && (
@@ -630,7 +636,7 @@ export const AuctionView = () => {
                   ))}
               </p>
 
-              <div className="text-center px-3 mt-4 pb-0">
+              <div className="text-center  mt-4 pb-0">
                 <p
                   className="fs-5 py-2 rounded w-100 text-white"
                   style={{ background: '#232A61' }}
@@ -638,18 +644,53 @@ export const AuctionView = () => {
                   Metadata
                 </p>
               </div>
+              <div className="text-end">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="25"
+                  cursor=' pointer'
+                  fill="currentColor"
+                  className="text-white bi bi-chevron-down"
+                  viewBox="0 0 16 16"
+                  onClick={checkShowDetails}
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                  />
+                </svg>
+              </div>
+              
+
+              {/* {
+                check &&
+                <>
+                {attributes && (
+                              <List grid={{ column: 4 }}>
+                                {attributes.map((attribute, index) => (
+                                  <p className="text-white mt-3 text-start me-5">
+                                    <b className="">{attribute.trait_type}:</b>
+                                    <p className="tileId text-white"> {attribute.value}</p>
+                                  </p>
+                                ))}
+                              </List>
+                            )}
+                </>
+                
+              } */}
+
               {attributes && (
-                <div className={''}>
-                  <List grid={{ column: 4 }}>
-                    {attributes.map((attribute, index) => (
-                      <p className="text-white mt-3 text-start me-5">
-                        <b className=''>{attribute.trait_type}:</b>
-                        <p className="tileId text-white"> {attribute.value}</p>
-                      </p>
-                    ))}
-                  </List>
-                </div>
+                <List grid={{ column: 4 }}>
+                  {attributes.map((attribute, index) => (
+                    <p className="text-white mt-3 text-start me-5">
+                      <b className="">{attribute.trait_type}:</b>
+                      <p className="tileId text-white"> {attribute.value}</p>
+                    </p>
+                  ))}
+                </List>
               )}
+
             </div>
           </div>
         </div>
@@ -657,7 +698,9 @@ export const AuctionView = () => {
         <div className="col-3 col-sm-12 col-lg-3 Connected px-4 pe-5">
           <div className="card border">
             <div className="card-body py-4">
-              <h5 className="text-white fs-6 p-2 pb-3 mx-4">Get Connected</h5>
+              <h5 className="text-white fs-6 p-2 pb-0 mx-4 text-center">
+                Get Connected
+              </h5>
               <div className="place-bid-two text-center mt-3 pb-0">
                 <button type="button" className=" btn btn-rounded  pt-3 pb-1">
                   <h5 className="text-white">Connect Wallet</h5>
@@ -665,17 +708,17 @@ export const AuctionView = () => {
               </div>
 
               <div className="place-bid-two-next text-center mt-4 pb-0">
-              <Link to={`/`} key={'explore'}>
-                <button
-                  type="button"
-                  className="text-white costom btn btn-rounded pt-3 "
-                >
-                  <h5 className="text-white">How it Works</h5>
-                </button>
+                <Link to={`/`} key={'explore'}>
+                  <button
+                    type="button"
+                    className="text-white costom btn btn-rounded pt-3 "
+                  >
+                    <h5 className="text-white">How it Works</h5>
+                  </button>
                 </Link>
               </div>
 
-              <div className="place-bid-two-next text-center mt-4 mb-1">
+              <div className="place-bid-two-next text-center mt-4 mb-3">
                 <button type="button" className="costom btn btn-rounded pt-3 ">
                   <h5 className="text-white">Tiles Available</h5>
                 </button>
@@ -696,11 +739,15 @@ export const AuctionView = () => {
             <img className="map-avrat-logo" src={'/map-logo.png'} />
 
             <div
-              className="position-absolute w-25 pt-3"
+              className="position-absolute w-25 pt-3 pe-5"
               style={{ marginLeft: '75%' }}
             >
               <div className="place-bid-two  text-center  mt-3 pb-0">
-                <button type="button" className=" btn btn-rounded  pt-2 pb-1" onClick={myfunc}>
+                <button
+                  type="button"
+                  className=" btn btn-rounded  pt-2 pb-1"
+                  onClick={myfunc}
+                >
                   <h5 className="text-white">Go to Virtual Earth</h5>
                 </button>
               </div>
