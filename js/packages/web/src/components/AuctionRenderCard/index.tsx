@@ -64,7 +64,7 @@ export const AuctionRenderCard = (props: AuctionCard) => {
           </div>
           </div>
           
-          <div className={'art-name pt-3'}>{name}</div>
+          <div className={'art-name pt-5'}>{name}</div>
           {/* <div className="auction-info-container">
             <div className={'info-message'}>ENDING IN</div>
             <AuctionCountdown auctionView={auctionView} labels={false} />

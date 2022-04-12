@@ -22,7 +22,7 @@ const Card =(props)=>{
               }}
             >
         <div className="col-11">
-                {location.pathname}
+              
                 <div className="row g-5 top-section">
                   <div className="col-12 col-sm-12 col-md-6">
                     <div
