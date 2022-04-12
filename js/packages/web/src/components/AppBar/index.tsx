@@ -157,11 +157,11 @@ const getDefaultLinkActions = (connected: boolean) => {
     
   </Link>,
   
-   <Link to={`/artists`} key={'artists'}>
+   <Link to={``} key={''}>
      <div className='ms-5'>
    <img style={{width: '12%'}} src={'/logout.png'} />
    <Button
-                    className="metaplex-button-default"
+                    className="metaplex-button-default app-btn nave-list fs-5 fw-normal mb-3"
                     onClick={disconnect}
                     style={btnStyle}
                   >
