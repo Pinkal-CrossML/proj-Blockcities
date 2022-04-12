@@ -49,7 +49,7 @@ export const CurrentUserBadge = (props: {
         </span>
       )}
 
-      <Popover
+      <Popover 
         placement="topRight"
         title="Settings"
         content={<Settings />}

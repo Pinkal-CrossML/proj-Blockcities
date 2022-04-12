@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Menu, Modal } from 'antd';
+import { Button, Menu, Modal,Popover, Select } from 'antd';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Notifications } from '../Notifications';
 import useWindowDimensions from '../../utils/layout';
 import { MenuOutlined } from '@ant-design/icons';
 import { HowToBuyModal } from '../HowToBuyModal';
+import {
+  ENDPOINTS,
+  useConnectionConfig,
+  useQuerySearch,
+} from '@oyster/common';
+
 import {
   Cog,
   CurrentUserBadge,
@@ -14,9 +20,16 @@ import {
 import { ConnectButton } from '@oyster/common';
 import { MobileNavbar } from '../MobileNavbar';
 import classNames from 'classnames';
+const btnStyle: React.CSSProperties = {
+  border: 'none',
+  height: 40,
+};
 
 const getDefaultLinkActions = (connected: boolean) => {
+  const { endpoint } = useConnectionConfig();
+  const routerSearchParams = useQuerySearch();
   return [
+    
     
     <Link to={`/`} key={'explore'}>
       <Button className="app-btn index-nav-map fs-5 fw-normal ms-4">Map</Button>
@@ -38,11 +51,11 @@ const getDefaultLinkActions = (connected: boolean) => {
       </div>
       
   </Link>,
-    <Link to={`/artworks`} key={'artwork'}>
+    <Link to={`/`} key={'artwork'}>
       <div className='ms-5'>
       <img style={{width: '12%'}} src={'/activity.png'} />
-      <Button className="app-btn nave-list fs-5 fw-normal mb-3">{connected ? 'My Activity' : 'Artwork'}</Button>
-      </div>
+      <Button className="app-btn nave-list fs-5 fw-normal mb-3">My Activity</Button>
+      </div> 
       
     </Link>,
     <Link to={""} key={'artists'}>
@@ -50,17 +63,95 @@ const getDefaultLinkActions = (connected: boolean) => {
 
     
   </Link>,
-    <Link to={`/artists`} key={'artists'}>
+    <Link to={`/artworks`} key={'artwork'}>
+      
       <div className='ms-5'>
       <img style={{width: '12%'}}  src={'/Vector.png'} />
-      <Button className="app-btn nave-list fs-5 fw-normal mb-3">My Wallet</Button>
+      <Button className="app-btn nave-list fs-5 fw-normal mb-3">{connected ? 'My Wallet' : 'Artwork'}</Button>
       </div>
       
     </Link>,
-    <Link to={`/artists`} key={'artists'}>
+
+    
+    <Link to={`/`} key={''}>
       <div className='ms-5'>
-      <img style={{width: '12%'}}  src={'/settings.png'} />
-    <Button className="app-btn nave-list fs-5 fw-normal mb-3">Settings</Button>
+    
+    <div className="">
+      <Popover
+        trigger="click"
+        placement="bottomRight"
+        content={
+          <div
+            style={{
+              width: 250,
+            }}
+          >
+            <h5
+              style={{
+                color: 'rgba(255, 255, 255, 0.7)',
+                letterSpacing: '0.02em',
+              }}
+            >
+              NETWORK
+            </h5>
+            <Select
+              onSelect={network => {
+                // Reload the page, forward user selection to the URL querystring.
+                // The app will be re-initialized with the correct network
+                // (which will also be saved to local storage for future visits)
+                // for all its lifecycle.
+
+                // Because we use react-router's HashRouter, we must append
+                // the query parameters to the window location's hash & reload
+                // explicitly. We cannot update the window location's search
+                // property the standard way, see examples below.
+
+                // doesn't work: https://localhost/?network=devnet#/
+                // works: https://localhost/#/?network=devnet
+                const windowHash = window.location.hash;
+                routerSearchParams.set('network', network);
+                const nextLocationHash = `${
+                  windowHash.split('?')[0]
+                }?${routerSearchParams.toString()}`;
+                window.location.hash = nextLocationHash;
+                window.location.reload();
+              }}
+              value={endpoint.name}
+              bordered={false}
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                borderRadius: 8,
+                width: '100%',
+                marginBottom: 10,
+              }}
+            >
+              {ENDPOINTS.map(({ name }) => (
+                <Select.Option value={name} key={endpoint.name}>
+                  {name}
+                </Select.Option>
+              ))}
+            </Select>
+
+            <Button
+              className="metaplex-button-default"
+              style={btnStyle}
+              // onClick={open}
+            >
+              Change wallet
+            </Button>
+          </div>
+        }
+      >
+        <div className=''>
+        <img className=" "style={{width: '12%'}}  src={'/settings.png'} />
+        <Button className=" app-btn nave-list fs-5 fw-normal mb-3">Settings</Button>
+        </div>
+        
+      </Popover>
+
+      
+    </div>
+    
       </div>
     
   </Link>,
@@ -81,6 +172,7 @@ const getDefaultLinkActions = (connected: boolean) => {
         </div>
    
  </Link>,
+ 
  
 
   ];
