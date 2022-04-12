@@ -26,6 +26,7 @@ const btnStyle: React.CSSProperties = {
 };
 
 const getDefaultLinkActions = (connected: boolean) => {
+  const { wallet, publicKey, disconnect } = useWallet();
   const { endpoint } = useConnectionConfig();
   const routerSearchParams = useQuerySearch();
   return [
@@ -155,10 +156,19 @@ const getDefaultLinkActions = (connected: boolean) => {
       </div>
     
   </Link>,
+  
    <Link to={`/artists`} key={'artists'}>
      <div className='ms-5'>
    <img style={{width: '12%'}} src={'/logout.png'} />
-   <Button className="app-btn nave-list fs-5 fw-normal ">Logout</Button></div>
+   <Button
+                    className="metaplex-button-default"
+                    onClick={disconnect}
+                    style={btnStyle}
+                  >
+                    Logout
+                  </Button>
+   </div>
+   
    <div className="img-div pt-0 pb-4">
             <img className='img1 ms-4 mt-5 pt-1' src={"/Bg (1).png"} />
             <img className='img2'src={"/Ornament.png"}/>
