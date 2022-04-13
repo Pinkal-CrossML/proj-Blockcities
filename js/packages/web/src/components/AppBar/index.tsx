@@ -52,7 +52,7 @@ const getDefaultLinkActions = (connected: boolean) => {
       </div>
       
   </Link>,
-    <Link to={`/`} key={'artwork'}>
+    <Link to={`/Myactivity`} key={'Myactivity'}>
       <div className='ms-5'>
       <img style={{width: '12%'}} src={'/activity.png'} />
       <Button className="app-btn nave-list fs-5 fw-normal mb-3">My Activity</Button>
@@ -207,7 +207,7 @@ export const MetaplexMenu = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const { connected } = useWallet();
 
-  if (width < 1648)
+  if (width < 1648) 
     return (
       <>
         <Modal

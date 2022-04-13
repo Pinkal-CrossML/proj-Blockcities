@@ -156,19 +156,19 @@ export const SalesListView = (props: any) => {
                                 </p>
                                 <h4 className="sol mb-0">66 SOL</h4>
                               </div>
-                              <div className="col-md-5  place-bid text-center p-2">
+                              <div className="col-md-5  place-bid text-center">
                                 <button
                                   type="button"
                                   className="btn btn-rounded p-0"
                                 >
-                                  <Link
+                                  <div
                                     className="text-white m-0 p-2 fw-bold"
                                     // key={auctionView.auction.pubkey}
                                     // to={`/auction/${auctionView.auction.pubkey}`}
-                                    to={`#`}
+                                    
                                   >
                                     Place Bid
-                                  </Link>
+                                  </div>
                                 </button>
                               </div>
                             </div>
@@ -216,6 +216,8 @@ export const SalesListView = (props: any) => {
                         <h5 className="text-white fs-6 p-2 pb-3 mx-4 text-center">
                           Get Connected
                         </h5>
+
+                        
                         <div className="place-bid-two text-center mt-3 pb-0">
                           <button
                             type="button"
