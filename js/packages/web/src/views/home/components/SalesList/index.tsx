@@ -216,13 +216,14 @@ export const SalesListView = (props: any) => {
                         <h5 className="text-white fs-6 p-2 pb-3 mx-4 text-center">
                           Get Connected
                         </h5>
-
-                        
+                         
+                       {/*  Connect Wallet here*/}
                         <div className="place-bid-two text-center mt-3 pb-0">
                           <button
                             type="button"
                             className=" btn btn-rounded  pt-3 pb-1"
                           >
+                            <h5 className="text-white">Connect Wallet</h5>
                             <h5 className="text-white">Connect Wallet</h5>
                           </button>
                         </div>
