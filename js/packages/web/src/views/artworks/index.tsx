@@ -3,7 +3,8 @@ import React, { useEffect, useState,useMemo } from 'react';
 import { Layout,Button, Row, Col,Popover, Tabs, Dropdown, Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import { CardLoader } from '../../components/MyLoader';
-
+import { Tooltip } from 'antd';
+import { CopyOutlined } from '@ant-design/icons';
 import { ArtworkViewState } from './types';
 import { useItems } from './hooks/useItems';
 import ItemCard from './components/ItemCard';
@@ -133,7 +134,7 @@ export const ArtworksView = (props: { iconSize: any; showAddress: any; showBalan
   if (unknownWallet.image) {
     image = <img src={unknownWallet.image} style={iconStyle} />;
   }
-  
+  // its not working
 const AddFundsModal = (props: {
   showAddFundsModal: any;
   setShowAddFundsModal: any;
@@ -159,8 +160,11 @@ const canCreate = useMemo(() => {
     <Layout style={{ margin: 0, marginTop: 30 }}>
       <Content style={{ display: 'flex', flexWrap: 'wrap' }}>
         <Col style={{ width: '100%', marginTop: 10 }}>
+          
           <Row>
+            
           <div className="wallet-wrapper p-4">
+            
       {props.showBalance && (
         <span>
           {formatNumber.format((account?.lamports || 0) / LAMPORTS_PER_SOL)} SOL
@@ -179,6 +183,43 @@ const canCreate = useMemo(() => {
                   width: 250,
                 }}
               >
+                <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: '15px 0',
+          
+        }}
+      >
+        <Identicon
+          address={publicKey?.toBase58()}
+          style={{
+            width: 48,
+          }}
+        />
+        {publicKey && (
+          <>
+            <Tooltip  title="Address copied">
+              <div
+                style={{
+                  fontWeight: 600,
+                  letterSpacing: '-0.02em',
+                  color: '#FFFFFF',
+                }}
+                onClick={() =>
+                  navigator.clipboard.writeText(publicKey?.toBase58() || '')
+                }
+              >
+                <CopyOutlined />
+                &nbsp;{shortenAddress(publicKey?.toBase58())}
+              </div>
+            </Tooltip>
+          </>
+        )}
+        <br />
+        
+      </div>
                 <h5
                   style={{
                     color: 'rgba(255, 255, 255, 0.7)',
@@ -228,13 +269,13 @@ const canCreate = useMemo(() => {
                     Add Funds
                   </Button>
                   &nbsp;&nbsp;
-                  <Button
+                  {/* <Button
                     className="metaplex-button-default"
                     onClick={disconnect}
                     style={btnStyle}
                   >
                     Disconnect
-                  </Button>
+                  </Button> */}
                 </div>
                 {/* <UserActions /> */}
 
@@ -270,14 +311,14 @@ const canCreate = useMemo(() => {
               tabBarExtraContent={refreshButton}
             >
               <TabPane
-                tab={<span className="tab-title">All</span>}
+                tab={<span className="tab-title fs-6">All</span>}
                 key={ArtworkViewState.Metaplex}
               >
                 {artworkGrid}
               </TabPane>
               {connected && (
                 <TabPane
-                  tab={<span className="tab-title">Owned</span>}
+                  tab={<span className="tab-title fs-6">Owned</span>}
                   key={ArtworkViewState.Owned}
                 >
                   {artworkGrid}
@@ -285,7 +326,7 @@ const canCreate = useMemo(() => {
               )}
               {connected && (
                 <TabPane
-                  tab={<span className="tab-title">Created</span>}
+                  tab={<span className="tab-title fs-6">Created</span>}
                   key={ArtworkViewState.Created}
                 >
                   {artworkGrid}

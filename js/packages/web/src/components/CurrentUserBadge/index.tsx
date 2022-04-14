@@ -302,13 +302,13 @@ export const CurrentUserBadge = (props: {
                     Add Funds
                   </Button>
                   &nbsp;&nbsp;
-                  <Button
+                  {/* <Button
                     className="metaplex-button-default"
                     onClick={disconnect}
                     style={btnStyle}
                   >
                     Disconnect
-                  </Button>
+                  </Button> */}
                 </div>
                 <UserActions />
               </div>

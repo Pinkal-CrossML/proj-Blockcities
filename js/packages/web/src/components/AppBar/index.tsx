@@ -17,6 +17,7 @@ import {
   CurrentUserBadge,
   CurrentUserBadgeMobile,
 } from '../CurrentUserBadge';
+
 import { ConnectButton } from '@oyster/common';
 import { MobileNavbar } from '../MobileNavbar';
 import classNames from 'classnames';
@@ -35,15 +36,7 @@ const getDefaultLinkActions = (connected: boolean) => {
     <Link to={`/`} key={'explore'}>
       <Button className="app-btn index-nav-map fs-5 fw-normal ms-4">Map</Button>
     </Link>,
-    <Link to={`/`} key={'explore'}>
-      
-      <div className="nav-back-icon">
-        <div className='ms-5'>
-          <img style={{width: '15%'}} src={'/H1.png'} />
-      <Button className="app-btn nave-list fs-5 fw-normal mb-3 ">Home</Button></div>
-      
-      </div>
-    </Link>,
+    
     
     <Link to={`/`} key={'explore'}>
       <div className='ms-5'>
@@ -169,7 +162,7 @@ const getDefaultLinkActions = (connected: boolean) => {
                   </Button>
    </div>
    
-   <div className="img-div pt-0 pb-4">
+   <div className="img-div pt-5 pb-4">
             <img className='img1 ms-4 mt-5 pt-1' src={"/Bg (1).png"} />
             <img className='img2'src={"/Ornament.png"}/>
             <img className='img3 pt-1' src={"/VIP.png"} /> 
@@ -298,7 +291,7 @@ export const AppBar = () => {
 
         </div>
       
-        <div className="app-right">
+        {/* <div className="app-right">
           {!connected && (
             <HowToBuyModal buttonClassName="modal-button-default" />
           )}
@@ -316,7 +309,7 @@ export const AppBar = () => {
               <Cog />
             </>
           )}
-        </div>
+        </div> */}
       </div>
 
       
