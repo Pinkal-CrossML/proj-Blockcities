@@ -131,7 +131,7 @@ const getDefaultLinkActions = (connected: boolean) => {
               style={btnStyle}
               // onClick={open}
             >
-              Change wallet
+              Change wallet..
             </Button>
           </div>
         }
@@ -162,11 +162,13 @@ const getDefaultLinkActions = (connected: boolean) => {
                   </Button>
    </div>
    
-   <div className="img-div pt-5 pb-4">
+   <div className="img-div mt-4 pt-5 pb-4 position-relative">
             <img className='img1 ms-4 mt-5 pt-1' src={"/Bg (1).png"} />
             <img className='img2'src={"/Ornament.png"}/>
             <img className='img3 pt-1' src={"/VIP.png"} /> 
-    
+            <div className="position-absolute text-center text-white" style={{top:"50%",lineHeight:"25px", width:"100%"}}>
+            <div>JOIN VIP<br/> For Special Perks</div>
+            </div>
             <Link className="white-grad fs-6 buy-now-btn"
                       // key={auctionView.auction.pubkey}
                       to={`/auction/`}
@@ -315,5 +317,5 @@ export const AppBar = () => {
       
     </>
   );
+  
 };
-{/* <h6 className='text-white'>JOIN VIP For Special Perks</h6> */}

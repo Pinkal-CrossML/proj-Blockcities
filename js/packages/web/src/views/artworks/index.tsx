@@ -13,7 +13,14 @@ import { DownOutlined } from '@ant-design/icons';
 import { isMetadata, isPack } from './utils';
 import { useMeta, useSolPrice } from '../../contexts';
 import { useTokenList } from '../../contexts/tokenList';
-import { TokenCircle } from '/home/pinkal/Work/Blockcities/metaplex/js/packages/web/src/components/Custom/';
+import { TokenCircle } from '../../components/Custom';
+import { Notifications } from '../../components/Notifications';
+
+import {
+  Cog,
+  CurrentUserBadge,
+  CurrentUserBadgeMobile,
+} from '../../components/CurrentUserBadge';
 
 import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
 
@@ -134,15 +141,110 @@ export const ArtworksView = (props: { iconSize: any; showAddress: any; showBalan
   if (unknownWallet.image) {
     image = <img src={unknownWallet.image} style={iconStyle} />;
   }
-  // its not working
-const AddFundsModal = (props: {
-  showAddFundsModal: any;
-  setShowAddFundsModal: any;
-  balance: number;
-  publicKey: PublicKey;
-  showBalance?: boolean;
-})=>{
-}
+
+  const AddFundsModal = (props: {
+    showAddFundsModal: any;
+    setShowAddFundsModal: any;
+    balance: number;
+    publicKey: PublicKey;
+  }) => {
+    return (
+      <MetaplexModal
+        visible={props.showAddFundsModal}
+        onCancel={() => props.setShowAddFundsModal(false)}
+        title="Add Funds"
+        bodyStyle={{
+          alignItems: 'start',
+        }}
+      >
+        <div style={{ maxWidth: '100%' }}>
+          <p style={{ color: 'white' }}>
+            We partner with <b>FTX</b> to make it simple to start purchasing
+            digital collectibles.
+          </p>
+          <div
+            style={{
+              width: '100%',
+              background: '#232A61',
+              borderRadius: 12,
+              marginBottom: 10,
+              height: 50,
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 10px',
+              justifyContent: 'space-between',
+              fontWeight: 700,
+            }}
+          >
+            <span style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Balance</span>
+            <span>
+              {formatNumber.format(props.balance)}&nbsp;&nbsp;
+              <span
+                style={{
+                  borderRadius: '50%',
+                  background: 'black',
+                  display: 'inline-block',
+                  padding: '1px 4px 4px 4px',
+                  lineHeight: 1,
+                }}
+              >
+                <img src="/sol.svg" width="10" />
+              </span>{' '}
+              SOL
+            </span>
+          </div>
+          <p>
+            If you have not used FTX Pay before, it may take a few moments to get
+            set up.
+          </p>
+          <Button
+            onClick={() => props.setShowAddFundsModal(false)}
+            style={{
+              background: '#454545',
+              borderRadius: 14,
+              width: '30%',
+              padding: 10,
+              height: 'auto',
+            }}
+          >
+            Close
+          </Button>
+          <Button
+            onClick={() => {
+              window.open(
+                `https://ftx.com/pay/request?coin=SOL&address=${props.publicKey?.toBase58()}&tag=&wallet=sol&memoIsRequired=false`,
+                '_blank',
+                'resizable,width=680,height=860',
+              );
+            }}
+            style={{
+              background: 'black',
+              borderRadius: 14,
+              width: '68%',
+              marginLeft: '2%',
+              padding: 10,
+              height: 'auto',
+              borderColor: 'black',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                placeContent: 'center',
+                justifyContent: 'center',
+                alignContent: 'center',
+                alignItems: 'center',
+                fontSize: 16,
+              }}
+            >
+              <span style={{ marginRight: 5 }}>Sign with</span>
+              <img src="/ftxpay.png" width="80" />
+            </div>
+          </Button>
+        </div>
+      </MetaplexModal>
+    );
+  };
 
 
 const pubkey = publicKey?.toBase58() || '';
@@ -163,14 +265,15 @@ const canCreate = useMemo(() => {
           
           <Row>
             
-          <div className="wallet-wrapper p-4">
+          <div className="wallet-wrapper  p-4" style={{width:"31%",  marginRight:"40px"
+        }}>
             
       {props.showBalance && (
         <span>
           {formatNumber.format((account?.lamports || 0) / LAMPORTS_PER_SOL)} SOL
         </span>
       )}
-
+      
       {/* <Popover
         trigger="click"
         placement="bottomRight"
@@ -180,64 +283,83 @@ const canCreate = useMemo(() => {
             
               <div
                 style={{
-                  width: 250,
+                  width: 450,
                 }}
               >
                 <div
         style={{
           display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
           padding: '15px 0',
           
         }}
       >
-        <Identicon
+
+        {publicKey && (
+          <>
+                  <Identicon
           address={publicKey?.toBase58()}
+          className="me-3"
           style={{
             width: 48,
           }}
         />
-        {publicKey && (
-          <>
-            <Tooltip  title="Address copied">
+            <Tooltip title="Address copied">
               <div
                 style={{
                   fontWeight: 600,
                   letterSpacing: '-0.02em',
                   color: '#FFFFFF',
                 }}
+                
                 onClick={() =>
                   navigator.clipboard.writeText(publicKey?.toBase58() || '')
                 }
               >
+                <span className=''>
                 <CopyOutlined />
                 &nbsp;{shortenAddress(publicKey?.toBase58())}
+              
+                
+          
+              </span>
               </div>
+
             </Tooltip>
+            {connected && (
+                        <div className='ms-5'>
+                          <Notifications />
+                        </div>
+              )}
           </>
         )}
         <br />
         
       </div>
-                <h5
+                <p
                   style={{
                     color: 'rgba(255, 255, 255, 0.7)',
                     letterSpacing: '0.02em',
                   }}
                 >
-                  BALANCE
-                </h5>
+                  
+                
                 <div
+                 
                   style={{
                     marginBottom: 10,
                   }}
                 >
+                  
+                  <span className='fs-5 me-2'>BALANCE: </span>
+
                   <TokenCircle
                     iconFile={solMintInfo ? solMintInfo.logoURI : ''}
                   />
+                  
                   &nbsp;
                   <span
+                  className='fs-5'
                     style={{
                       fontWeight: 600,
                       color: '#FFFFFF',
@@ -255,20 +377,68 @@ const canCreate = useMemo(() => {
                   </span>
                   &nbsp;
                 </div>
+                </p>
                 <div
                   style={{
                     display: 'flex',
                     marginBottom: 10,
+                    marginTop: 20,
                   }}
                 >
-                  <Button
-                    className="metaplex-button-default"
+                 
+                </div>
+                {/* <UserActions /> */}
+
+
+                <div
+            style={{
+              display: 'flex',
+            }}
+          >
+          </div>
+              </div>
+
+    </div>
+    <div className="wallet-wrapper  py-4" style={{width:"31%"
+        }}>
+            
+ 
+            
+              <div
+                style={{
+                  width: 450,
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection:'column',
+                    
+                  }}
+                >
+                  
+                  <Button 
+                    className="border rounded w-75 my-4"
                     onClick={() => setShowAddFundsModal(true)}
                     style={btnStyle}
                   >
-                    Add Funds
+                    Add Funds...
                   </Button>
-                  &nbsp;&nbsp;
+                  {canCreate && (
+              <>
+                <Link to={`/art/create`} className="border rounded w-75 mb-4 text-center">
+                  <Button className="metaplex-button-default" style={btnStyle}>
+                    Create NFTs
+                  </Button>
+                </Link>
+              </>
+            )}
+            <Link to={`/auction/create/0`} className="border rounded w-75 mb-4 text-center">
+              <Button className="metaplex-button-default" style={btnStyle}>
+                Sell NFTs
+              </Button>
+            </Link>
                   {/* <Button
                     className="metaplex-button-default"
                     onClick={disconnect}
@@ -285,30 +455,38 @@ const canCreate = useMemo(() => {
               display: 'flex',
             }}
           >
-            {canCreate && (
-              <>
-                <Link to={`/art/create`} style={{ width: '100%' }}>
-                  <Button className="metaplex-button-default" style={btnStyle}>
-                    Create
-                  </Button>
-                </Link>
-                &nbsp;&nbsp;
-              </>
-            )}
-            <Link to={`/auction/create/0`} style={{ width: '100%' }}>
-              <Button className="metaplex-button-default" style={btnStyle}>
-                Sell
-              </Button>
-            </Link>
           </div>
               </div>
+              {/* <Button className="wallet-key">
+          {image}
+          {name && (
+            <span
+              style={{
+                marginLeft: '0.5rem',
+                fontWeight: 600,
+              }}
+            >
+              {name}
+            </span>
+          )}
+        </Button> */}
+      {/* </Popover> */}
+      <AddFundsModal
+        setShowAddFundsModal={setShowAddFundsModal}
+        showAddFundsModal={showAddFundsModal}
+        publicKey={publicKey}
+        balance={balance}
+      />
 
     </div>
+
+
 
             <Tabs
               activeKey={activeKey}
               onTabClick={key => setActiveKey(key as ArtworkViewState)}
               tabBarExtraContent={refreshButton}
+              className="mt-5"
             >
               <TabPane
                 tab={<span className="tab-title fs-6">All</span>}

@@ -8,7 +8,8 @@ export interface ConnectButtonProps
   extends ButtonProps,
     React.RefAttributes<HTMLElement> {
   allowWalletChange?: boolean;
-  className?: string;
+  className?: string ;
+
 }
 
 export const ConnectButton = (props: ConnectButtonProps) => {
@@ -27,7 +28,7 @@ export const ConnectButton = (props: ConnectButtonProps) => {
   if (!wallet || !allowWalletChange) {
     return (
       <Button
-        className={className || 'connector'}
+        className={className  || 'connector '}
         {...rest}
         onClick={e => {
           props.onClick ? props.onClick(e) : null;

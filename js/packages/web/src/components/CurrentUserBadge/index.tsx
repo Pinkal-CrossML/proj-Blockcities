@@ -235,7 +235,8 @@ export const CurrentUserBadge = (props: {
   }
 
   return (
-    <div className="wallet-wrapper">
+    <div className="wallet-wrapper ms-4 place-bid " style={{width: '82%' ,pointerEvents:'none'}}>
+       
       {props.showBalance && (
         <span>
           {formatNumber.format((account?.lamports || 0) / LAMPORTS_PER_SOL)} SOL
@@ -347,7 +348,7 @@ export const Cog = () => {
   const open = useCallback(() => setVisible(true), [setVisible]);
 
   return (
-    <div className="wallet-wrapper">
+    <div className="wallet-wrapper ">
       <Popover
         trigger="click"
         placement="bottomRight"
@@ -413,9 +414,9 @@ export const Cog = () => {
           </div>
         }
       >
-        {/* <Button className="wallet-key">
+        <Button className="wallet-key">
           <img src="/cog.svg" />
-        </Button> */}
+        </Button>
       </Popover>
     </div>
   );

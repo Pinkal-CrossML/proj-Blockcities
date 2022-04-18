@@ -16,12 +16,12 @@ import { Connection } from '@solana/web3.js';
 import { AuctionViewItem } from '@oyster/common/dist/lib/models/metaplex/index';
 import { Link } from 'react-router-dom';
 import { ConnectButton } from '@oyster/common';
-import { Notifications } from '/home/pinkal/Work/Blockcities/metaplex/js/packages/web/src/components/Notifications/';
+import { Notifications } from '../../components/Notifications/index';
 import {
   Cog,
   CurrentUserBadge,
   CurrentUserBadgeMobile,
-} from '/home/pinkal/Work/Blockcities/metaplex/js/packages/web/src/components/CurrentUserBadge/';
+} from '../../components/CurrentUserBadge/index';
 import {
   AuctionView as Auction,
   useArt,
@@ -711,7 +711,7 @@ export const AuctionView = () => {
               <h5 className="text-white fs-6 p-2 pb-0 mx-4 text-center">
                 Get Connected
               </h5>
-
+                 
               {!connected && (
                         <ConnectButton
                           className="place-bid-two text-center ms-4 border-0 "
@@ -726,8 +726,7 @@ export const AuctionView = () => {
                             showAddress={true}
                             iconSize={24}
                           />
-                          <Notifications />
-                          <Cog />
+
                         </>
                       )}
               {/* <div className="place-bid-two text-center mt-3 pb-0">

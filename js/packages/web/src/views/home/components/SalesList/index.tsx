@@ -120,6 +120,7 @@ export const SalesListView = (props: any) => {
                                 style={{ width: '100%' }}
                               />
                             </div>
+                            
                             <div className="col-md-10">
                               <h5 className="card-title ms-3 fs-6 light-blue d-flex h-100">
                                 <span className="align-self-center ">
@@ -137,7 +138,7 @@ export const SalesListView = (props: any) => {
                           </div>
                           <div className="row gx-0">
                             <p className=" text-light  offset-2  my-2">
-                              California
+                              California.
                             </p>
                           </div>
 
@@ -177,7 +178,7 @@ export const SalesListView = (props: any) => {
                 <div className="col-3 col-sm-12 col-lg-3 Connected">
                   <div className="card border">
                     <div className="card-body pb-1">
-                      <h5 className="text-white p-2 fs-6 pb-3 mx-4 text-center">
+                      <h5 className="text-white p-2 fs-5 pb-3 mx-4 text-center">
                         NFT Details
                       </h5>
                       <div className="place-bid-two-next text-center mt-2 pb-0">
@@ -185,7 +186,7 @@ export const SalesListView = (props: any) => {
                           type="button"
                           className="text-white  btn btn-rounded pt-2 "
                         >
-                          <h5 className="text-white">Details</h5>
+                          <h5 className="text-white fs-6">Details</h5>
                         </button>
                       </div>
                       <p className=" text-white mt-3 ms-4 me-5">
@@ -197,7 +198,7 @@ export const SalesListView = (props: any) => {
                           type="button"
                           className="text-white  btn btn-rounded mt-1 "
                         >
-                          <h5 className="text-white">Metadata</h5>
+                          <h5 className="text-white fs-6">Metadata</h5>
                         </button>
                       </div>
                       <p className="text-white mt-3 fs-6 mb-4 ms-4 me-4">
@@ -210,8 +211,8 @@ export const SalesListView = (props: any) => {
                 <div className="col-3 col-sm-12 col-lg-3 Connected ">
                   <div className="card border">
                     <div className="card-body pb-5">
-                      <h5 className="text-white fs-6 p-2 pb-3 mx-4 text-center">
-                        Get Connected
+                      <h5 className="text-white fs-5 p-2 pb-3 mx-4 text-center">
+                        Get Connected..
                       </h5>
 
                       {/* <div className="place-bid-two text-center mt-3 pb-0"> */}
@@ -219,46 +220,39 @@ export const SalesListView = (props: any) => {
                       {!connected && (
                         <ConnectButton
                           className="place-bid-two text-center ms-4 border-0 "
-                          style={{ height: 48 }}
+                          style={{ height: 48  }}
                           allowWalletChange
                         />
                       )}
                       {connected && (
                         <>
                           <CurrentUserBadge
+
                             showBalance={false}
                             showAddress={true}
                             iconSize={24}
                           />
-                          <Notifications />
-                          <Cog />
+    
                         </>
                       )}
-                      {/* <button
-                            type="button"
-                            className=" btn btn-rounded  pt-3 pb-1"
-                          >
-                           <h5 className="text-white">Connect Wallet</h5>
-                          </button> */}
-                      {/* </div> */}
 
-                      <div className="place-bid-two-next text-center mt-4 pb-0">
+                      <div className="place-bid-two-next place-bid-two-next-hover text-center mt-4 pb-0">
                         <Link to={``} key={'explore'}>
                           <button
                             type="button"
                             className="text-white  btn btn-rounded pt-3 "
                           >
-                            <h5 className="text-white">How it Works</h5>
+                            <h5 className="text-white fs-6">How it Works</h5>
                           </button>
                         </Link>
                       </div>
 
-                      <div className="place-bid-two-next text-center mt-4 pb-0">
+                      <div className="place-bid-two-next  place-bid-two-next-hover text-center mt-4 pb-0">
                         <button
                           type="button"
                           className=" btn btn-rounded pt-3 "
                         >
-                          <h5 className="text-white">Tiles Available</h5>
+                          <h5 className="text-white fs-6">Tiles Available</h5>
                         </button>
                       </div>
                     </div>
