@@ -26,7 +26,7 @@ const btnStyle: React.CSSProperties = {
   height: 40,
 };
 
-const getDefaultLinkActions = (connected: boolean) => {
+const getDefaultLinkActions = (connected: boolean ) => {
   const { wallet, publicKey, disconnect } = useWallet();
   const { endpoint } = useConnectionConfig();
   const routerSearchParams = useQuerySearch();
@@ -37,8 +37,7 @@ const getDefaultLinkActions = (connected: boolean) => {
       <Button className="app-btn index-nav-map fs-5 fw-normal ms-4">Map</Button>
     </Link>,
     
-    
-    <Link to={`/`} key={'explore'}>
+    <Link className='nav-back-icon' to={`/`} key={'explore'} >
       <div className='ms-5'>
       <img style={{width: '12%'}} src={'/market.png'} />
     <Button className="app-btn nave-list fs-5 fw-normal mb-3 ">Marketplace</Button>
@@ -131,7 +130,7 @@ const getDefaultLinkActions = (connected: boolean) => {
               style={btnStyle}
               // onClick={open}
             >
-              Change wallet..
+              Change wallet
             </Button>
           </div>
         }

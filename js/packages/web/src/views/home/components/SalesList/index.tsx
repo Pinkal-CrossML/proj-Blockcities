@@ -100,14 +100,15 @@ export const SalesListView = (props: any) => {
               </Tabs> */}
             </Row>
             <div className="col-12 pe-5 ">
-              {/* {location.pathname} */}
+      
+              {location.pathname}
               <div className="row g-5 top-section">
                 <div className="col-12 col-sm-12 col-md-6">
                   <div
                     className="card mb-4 px-2 card-main "
                     // style={{ maxWidth: '540px' }}
                   >
-                    <div className="row  no-gutters card-one">
+                    <div className="row  no-gutters card-one"> 
                       <div className="col-md-6 p-4 ">
                         <img src={'/town.png'} className="card-img" alt="..." />
                       </div>
@@ -212,7 +213,7 @@ export const SalesListView = (props: any) => {
                   <div className="card border">
                     <div className="card-body pb-5">
                       <h5 className="text-white fs-5 p-2 pb-3 mx-4 text-center">
-                        Get Connected..
+                        Get Connected
                       </h5>
 
                       {/* <div className="place-bid-two text-center mt-3 pb-0"> */}

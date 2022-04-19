@@ -423,7 +423,7 @@ const canCreate = useMemo(() => {
                     onClick={() => setShowAddFundsModal(true)}
                     style={btnStyle}
                   >
-                    Add Funds...
+                    Add Funds
                   </Button>
                   {canCreate && (
               <>
