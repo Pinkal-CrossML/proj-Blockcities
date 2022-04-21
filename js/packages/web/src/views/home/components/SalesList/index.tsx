@@ -1,8 +1,8 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Col, Layout, Row, Tabs } from 'antd';
 import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
-
+import axios from 'axios';
+import React, { useEffect, useState, useRef } from 'react';
 import { useMeta } from '../../../../contexts';
 import { CardLoader } from '../../../../components/MyLoader';
 import { Banner } from '../../../../components/Banner';
@@ -16,7 +16,8 @@ import {
   CurrentUserBadge,
   CurrentUserBadgeMobile,
 } from '../../../../components/CurrentUserBadge';
-
+import { AuctionCard } from '../../../../components/AuctionCard';
+import { useArt } from '../../../../hooks';
 const { TabPane } = Tabs;
 const { Content } = Layout;
 var newdata;
@@ -28,35 +29,97 @@ export enum LiveAuctionViewState {
 }
 
 export const SalesListView = (props: any) => {
+  var focused: any;
+  var featured: any;
+  // var focusedNFT: any;
   const [activeKey, setActiveKey] = useState(LiveAuctionViewState.All);
   const { isLoading } = useMeta();
   const { connected } = useWallet();
   const { auctions, hasResaleAuctions } = useAuctionsList(activeKey);
-
+  const [focus, setFocus] = useState<any>(null);
+  const [focusedNFT, setFocusedNFT] = useState<any>(null);
+  const [feature, setFeatured] = useState<any>(null);
+  const [featuredNft, setFeaturedNFT] = useState<any>([]);
   const [myArray, setMyArray] = useState<any[]>([]);
 
   const activateLasers = filter_type => {
+    var featured_nfts: any = [];
+    feature.forEach(element => {
+      featured_nfts.push(element.nft_id);
+    });
     setMyArray([]);
     console.log('auctions', auctions);
     auctions.forEach(auction => {
-      const artUri = auction.thumbnail.metadata.info.data.uri;
-      const fetchMeta = async () => {
-        await fetch(artUri)
-          .then(res => res.json())
-          .then(data => {
-            const attr = data.attributes;
-            console.log('attr', attr);
-            newdata = attr.filter(e => e.value.includes(filter_type));
-            console.log('newdata.length', newdata.length);
+      const mintId = auction.thumbnail.metadata.info.mint;
+      if (featured_nfts.includes(mintId)) {
+        console.log(mintId);
+        // debugger;
+        const artUri = auction.thumbnail.metadata.info.data.uri;
+        const fetchMeta = async () => {
+          await fetch(artUri)
+            .then(res => res.json())
+            .then(data => {
+              const attr = data.attributes;
+              console.log('attr', attr);
+              newdata = attr.filter(e => e.value.includes(filter_type));
+              console.log('newdata.length', newdata.length);
 
-            if (newdata.length > 0) {
-              setMyArray(arr => [...arr, auction]);
-              console.log('myArray', myArray);
-            }
-          });
-      };
-      fetchMeta();
+              if (newdata.length > 0) {
+                setMyArray(arr => [...arr, auction]);
+                console.log('myArray', myArray);
+              }
+            });
+        };
+        fetchMeta();
+      }
     });
+  };
+
+  useEffect(() => {
+    getNFTData();
+    setFocused();
+  }, [auctions]);
+
+  const setFocused = async () => {
+    console.log('setFocused');
+    console.log('auctions', auctions);
+    auctions.forEach(auction => {
+      const mintId = auction.thumbnail.metadata.info.mint;
+      console.log('focused.nft_id', focus?.[0].nft_id);
+      console.log('mintId', mintId);
+
+      if (focus[0].nft_id == mintId) {
+        console.log('auction', auction);
+        setFocusedNFT(auction);
+      }
+      // debugger;
+      for (let a in feature) {
+        if (feature[a].nft_id == mintId) {
+          setFeaturedNFT(arr => [...arr, auction]);
+        }
+      }
+    });
+  };
+
+  const getNFTData = async () => {
+    const nfts: any[] = [];
+    const headers = {
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+    };
+    await axios
+      .get(
+        'https://pvxf520leh.execute-api.us-east-1.amazonaws.com/Nfts/getNftData',
+        { headers: headers },
+      )
+      .then(data => {
+        nfts.push(data.data.Items);
+        focused = nfts[0].filter(e => e.focused_nft.includes('True'));
+        setFocus(focused);
+        featured = nfts[0].filter(e => e.featured_nft.includes('True'));
+        setFeatured(featured);
+      });
   };
 
   return (
@@ -71,48 +134,32 @@ export const SalesListView = (props: any) => {
       <Layout>
         <Content style={{ display: 'flex', flexWrap: 'wrap' }}>
           <Col style={{ width: '100%', marginTop: 0 }}>
-            <Row>
-              {/* <Tabs
-                activeKey={activeKey}
-                onTabClick={key => setActiveKey(key as LiveAuctionViewState)}
-              >
-                <TabPane
-                  tab={
-                    <>
-                      <span className="live"></span> Live
-                    </>
-                  }
-                  key={LiveAuctionViewState.All}
-                ></TabPane>
-                {hasResaleAuctions && (
-                  <TabPane
-                    tab="Secondary Marketplace"
-                    key={LiveAuctionViewState.Resale}
-                  ></TabPane>
-                )}
-                <TabPane tab="Ended" key={LiveAuctionViewState.Ended}></TabPane>
-                {connected && (
-                  <TabPane
-                    tab="Participated"
-                    key={LiveAuctionViewState.Participated}
-                  ></TabPane>
-                )}
-              </Tabs> */}
-            </Row>
+            <Row></Row>
+
+                       <div>
+                          {focusedNFT && (
+                            <AuctionRenderCard
+                              auctionView={focusedNFT}
+                              key={focusedNFT.auction.pubkey}
+                            />
+                          )}
+                        </div>
+
             <div className="col-12 pe-5 ">
-      
-              {location.pathname}
               <div className="row g-5 top-section">
                 <div className="col-12 col-sm-12 col-md-6">
                   <div
                     className="card mb-4 px-2 card-main "
                     // style={{ maxWidth: '540px' }}
                   >
-                    <div className="row  no-gutters card-one"> 
+                    <div className="row  no-gutters card-one">
                       <div className="col-md-6 p-4 ">
                         <img src={'/town.png'} className="card-img" alt="..." />
                       </div>
                       <div className="col-md-6 col-sm-12 col-md-12 col-lg-6 ps-2 pe-0 pt-4">
+                        {/* {focusedNFT.pubkey} */}
+                        
+
                         <div className="">
                           <div className="row gx-0">
                             <div className="col-md-2 col-sm-2">
@@ -121,7 +168,7 @@ export const SalesListView = (props: any) => {
                                 style={{ width: '100%' }}
                               />
                             </div>
-                            
+
                             <div className="col-md-10">
                               <h5 className="card-title ms-3 fs-6 light-blue d-flex h-100">
                                 <span className="align-self-center ">
@@ -130,12 +177,13 @@ export const SalesListView = (props: any) => {
                               </h5>
                             </div>
                           </div>
+                          
                           <div className="row gx-0">
                             <button className=" citybtn w-50 btn py-2 my-3 ">
                               <h5 className="m-0 fw-bold citybtn-text text-center">
-                                Miami
+                                {/* {focusedNFT && focusedNFT.auction.thumbnail.metadata.info.data.name} */}
                               </h5>
-                            </button>
+                             </button>
                           </div>
                           <div className="row gx-0">
                             <p className=" text-light  offset-2  my-2">
@@ -148,6 +196,7 @@ export const SalesListView = (props: any) => {
                               United states
                             </p>
                           </div>
+                          
 
                           <div className="row gx-0  mb-3">
                             <div className="col-md-5">
@@ -221,19 +270,17 @@ export const SalesListView = (props: any) => {
                       {!connected && (
                         <ConnectButton
                           className="place-bid-two text-center ms-4 border-0 "
-                          style={{ height: 48  }}
+                          style={{ height: 48 }}
                           allowWalletChange
                         />
                       )}
                       {connected && (
                         <>
                           <CurrentUserBadge
-
                             showBalance={false}
                             showAddress={true}
                             iconSize={24}
                           />
-    
                         </>
                       )}
 
@@ -456,6 +503,14 @@ export const SalesListView = (props: any) => {
                         : '')
                 }
               >
+                {!isLoading &&
+                  featuredNft.map(auction => (
+                    <AuctionRenderCard
+                  
+                      auctionView={auction}
+                      key={auction.auction.pubkey}
+                    />
+                  ))}
                 {isLoading &&
                   [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
                 {!isLoading &&
@@ -470,6 +525,12 @@ export const SalesListView = (props: any) => {
                     />
                     // </Link>
                   ))}
+                {/* {feature && (
+                  <AuctionRenderCard
+                    auctionView={feature}
+                    key={feature.auction.pubkey}
+                  />
+                )} */}
               </div>
             </Row>
           </Col>
