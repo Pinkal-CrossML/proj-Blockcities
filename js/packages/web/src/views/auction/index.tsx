@@ -554,7 +554,7 @@ export const AuctionView = () => {
                   <div className="col-md-10">
                     <h5 className="card-title fs-6 light-blue d-flex h-100">
                       <span className="align-self-center ">
-                        Blockcities Virtual Earth.
+                        Blockcities Virtual Earth
                       </span>
                     </h5>
                   </div>
@@ -1061,6 +1061,7 @@ export const AuctionBids = ({
             View full history
           </div>
         )}
+        
         <MetaplexModal
           visible={showHistoryModal}
           onCancel={() => setShowHistoryModal(false)}
