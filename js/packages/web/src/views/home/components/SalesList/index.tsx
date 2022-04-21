@@ -11,6 +11,7 @@ import { ConnectButton } from '@oyster/common';
 import { useAuctionsList } from './hooks/useAuctionsList';
 import { AuctionRenderCard } from '../../../../components/AuctionRenderCard';
 import { Notifications } from '../../../../components/Notifications';
+import { h3ToGeo } from 'h3-js';
 import {
   Cog,
   CurrentUserBadge,
@@ -18,7 +19,11 @@ import {
 } from '../../../../components/CurrentUserBadge';
 import { AuctionCard } from '../../../../components/AuctionCard';
 import { useArt } from '../../../../hooks';
+import { useAuctionStatus } from '../../../../components/AuctionRenderCard/hooks/useAuctionStatus'
+import { AmountLabel } from '../../../../components/AmountLabel';
 const { TabPane } = Tabs;
+import mapboxgl from 'mapbox-gl';
+import { geoToH3 } from 'h3-js';
 const { Content } = Layout;
 var newdata;
 export enum LiveAuctionViewState {
@@ -31,7 +36,6 @@ export enum LiveAuctionViewState {
 export const SalesListView = (props: any) => {
   var focused: any;
   var featured: any;
-  // var focusedNFT: any;
   const [activeKey, setActiveKey] = useState(LiveAuctionViewState.All);
   const { isLoading } = useMeta();
   const { connected } = useWallet();
@@ -41,6 +45,31 @@ export const SalesListView = (props: any) => {
   const [feature, setFeatured] = useState<any>(null);
   const [featuredNft, setFeaturedNFT] = useState<any>([]);
   const [myArray, setMyArray] = useState<any[]>([]);
+  const [tileId, setTileid]=useState<any>(null)
+  const [desc, setDesc]= useState<any>('')
+ const [image, setImage]= useState<any>('')
+  
+  const id = focusedNFT?.thumbnail?.metadata?.pubkey;
+  const art = useArt(id);
+  const name = art?.title || ' ';
+  // const uri= focusedNFT?.thumbnail?.metadata?.info?.data?.uri
+  const url:string|any= art?.uri
+  
+  const price= focusedNFT?.auction.info.priceFloor.minPrice.words[1]
+  // const { status, amount } = useAuctionStatus(focusedNFT);
+    console.log('art',art);
+   
+
+    const reverseGeocoding = async (latlong) => {
+      // debugger
+      const token='pk.eyJ1IjoiamFnZGlzaDEyMSIsImEiOiJja3VhNmg1eHcwYWx3MnFteGdueXdlNGVmIn0.-TCYcPKARKOYmOJ5wFDETg'
+      // mapboxgl.accessToken =
+      // 'pk.eyJ1IjoiamFnZGlzaDEyMSIsImEiOiJja3VhNmg1eHcwYWx3MnFteGdueXdlNGVmIn0.-TCYcPKARKOYmOJ5wFDETg';
+      return await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${latlong[1]},${latlong[0]}.json?access_token=${token};`).then(response =>{ console.log(response);
+      })
+    }
+
+
 
   const activateLasers = filter_type => {
     var featured_nfts: any = [];
@@ -48,10 +77,11 @@ export const SalesListView = (props: any) => {
       featured_nfts.push(element.nft_id);
     });
     setMyArray([]);
-    console.log('auctions', auctions);
+    setFeaturedNFT([])
+    console.log('auctionsssss', auctions);
     auctions.forEach(auction => {
       const mintId = auction.thumbnail.metadata.info.mint;
-      if (featured_nfts.includes(mintId)) {
+      // if (featured_nfts.includes(mintId)) {
         console.log(mintId);
         // debugger;
         const artUri = auction.thumbnail.metadata.info.data.uri;
@@ -71,18 +101,35 @@ export const SalesListView = (props: any) => {
             });
         };
         fetchMeta();
-      }
+      // }
     });
   };
 
   useEffect(() => {
     getNFTData();
     setFocused();
+    setTimeout(() => {
+      fetchTile()
+      getstate()
+    }, 5000);
+    
   }, [auctions]);
+
+
+  const getstate=()=>{
+    setTimeout(async() => {
+      const tileEle= document.getElementsByClassName('TILE')[0].innerHTML
+          const tile=h3ToGeo(tileEle)
+          // debugger
+         await reverseGeocoding(tile)
+    }, 10000);
+  }
+
 
   const setFocused = async () => {
     console.log('setFocused');
     console.log('auctions', auctions);
+    // auctions?.[3]?.thumbnail?.metadata?.info?.data?.name
     auctions.forEach(auction => {
       const mintId = auction.thumbnail.metadata.info.mint;
       console.log('focused.nft_id', focus?.[0].nft_id);
@@ -100,6 +147,16 @@ export const SalesListView = (props: any) => {
       }
     });
   };
+
+
+// var desc;
+  const fetchTile=async()=>{
+await axios.get(url).then(res=>{console.log('tile',res.data);setTileid(res.data.attributes[0].value) ;setDesc(res.data.description);setImage(res.data.image)}) 
+
+}
+// console.log('tileId',tileId);
+// console.log('desc',desc);
+
 
   const getNFTData = async () => {
     const nfts: any[] = [];
@@ -135,31 +192,27 @@ export const SalesListView = (props: any) => {
         <Content style={{ display: 'flex', flexWrap: 'wrap' }}>
           <Col style={{ width: '100%', marginTop: 0 }}>
             <Row></Row>
-
-                       <div>
+                       {/* <div>
                           {focusedNFT && (
                             <AuctionRenderCard
                               auctionView={focusedNFT}
                               key={focusedNFT.auction.pubkey}
+                              
                             />
                           )}
-                        </div>
+                        </div> */}
 
             <div className="col-12 pe-5 ">
               <div className="row g-5 top-section">
                 <div className="col-12 col-sm-12 col-md-6">
                   <div
                     className="card mb-4 px-2 card-main "
-                    // style={{ maxWidth: '540px' }}
                   >
                     <div className="row  no-gutters card-one">
                       <div className="col-md-6 p-4 ">
-                        <img src={'/town.png'} className="card-img" alt="..." />
+                        <img src={image} className="card-img h-100" alt="..." />
                       </div>
                       <div className="col-md-6 col-sm-12 col-md-12 col-lg-6 ps-2 pe-0 pt-4">
-                        {/* {focusedNFT.pubkey} */}
-                        
-
                         <div className="">
                           <div className="row gx-0">
                             <div className="col-md-2 col-sm-2">
@@ -181,7 +234,7 @@ export const SalesListView = (props: any) => {
                           <div className="row gx-0">
                             <button className=" citybtn w-50 btn py-2 my-3 ">
                               <h5 className="m-0 fw-bold citybtn-text text-center">
-                                {/* {focusedNFT && focusedNFT.auction.thumbnail.metadata.info.data.name} */}
+                                {name}
                               </h5>
                              </button>
                           </div>
@@ -203,7 +256,10 @@ export const SalesListView = (props: any) => {
                               <p className="light-blue fs-5 mb-2">
                                 Available For
                               </p>
-                              <h4 className="sol mb-0">66 SOL</h4>
+                              {focusedNFT && 
+                              <h4 className="sol mb-0">{price} SOL</h4>
+                              }
+                              
                             </div>
                             <div className="col-md-5  place-bid text-center">
                               <button
@@ -212,8 +268,6 @@ export const SalesListView = (props: any) => {
                               >
                                 <div
                                   className="text-white m-0 p-2 fw-bold"
-                                  // key={auctionView.auction.pubkey}
-                                  // to={`/auction/${auctionView.auction.pubkey}`}
                                 >
                                   Place Bid
                                 </div>
@@ -240,8 +294,7 @@ export const SalesListView = (props: any) => {
                         </button>
                       </div>
                       <p className=" text-white mt-3 ms-4 me-5">
-                        Blockcities is a Toolkit to Bring the Brightest Future
-                        into Physical Form
+                       {desc}
                       </p>
                       <div className="place-bid-two-next text-center mt-2 pb-0">
                         <button
@@ -251,8 +304,8 @@ export const SalesListView = (props: any) => {
                           <h5 className="text-white fs-6">Metadata</h5>
                         </button>
                       </div>
-                      <p className="text-white mt-3 fs-6 mb-4 ms-4 me-4">
-                        Tile ID: 8444a11ffffffff
+                      <p className="text-white mt-3 fs-6 mb-4 ms-4 me-4 TILE">
+                        Tile ID: {tileId}
                       </p>
                     </div>
                   </div>
@@ -264,8 +317,6 @@ export const SalesListView = (props: any) => {
                       <h5 className="text-white fs-5 p-2 pb-3 mx-4 text-center">
                         Get Connected
                       </h5>
-
-                      {/* <div className="place-bid-two text-center mt-3 pb-0"> */}
 
                       {!connected && (
                         <ConnectButton
@@ -492,15 +543,17 @@ export const SalesListView = (props: any) => {
             <Row>
               <div
                 className={
-                  myArray.length == 1
+                  myArray.length == 1 
                     ? 'artwork-grid col-4 h-25 ps-5'
                     : '' +
-                      (myArray.length == 2
+                      (myArray.length == 2 
                         ? 'artwork-grid col-8 h-25 ps-5'
                         : '') +
-                      (myArray.length > 2
+                      (myArray.length > 2 || featuredNft.length>2
                         ? 'artwork-grid col-12 h-25 ps-5'
                         : '')
+                       
+                        
                 }
               >
                 {!isLoading &&
@@ -515,22 +568,14 @@ export const SalesListView = (props: any) => {
                   [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
                 {!isLoading &&
                   myArray.map(auction => (
-                    // <Link
-                    //   key={auction.auction.pubkey}
-                    //   to={`/auction/${auction.auction.pubkey}`}
-                    // >
+                  
                     <AuctionRenderCard
                       auctionView={auction}
                       key={auction.auction.pubkey}
                     />
                     // </Link>
                   ))}
-                {/* {feature && (
-                  <AuctionRenderCard
-                    auctionView={feature}
-                    key={feature.auction.pubkey}
-                  />
-                )} */}
+               
               </div>
             </Row>
           </Col>
