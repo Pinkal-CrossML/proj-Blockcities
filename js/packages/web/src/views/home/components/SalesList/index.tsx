@@ -49,11 +49,10 @@ export const SalesListView = (props: any) => {
   const [desc, setDesc] = useState<any>('');
   const [image, setImage] = useState<any>('');
   const [currentPath, setCurrentPath] = useState(location.pathname);
-const [notMatched, setNotmatched]= useState<any>()
-  
-const ids = featuredNft.map(auction => auction.thumbnail.metadata.info.data.name)
-const filtered = featuredNft.filter(({name}, index) => !ids.includes(name, index + 1))
-console.log(filtered, 'insideFiltesssssssssssssssssssssssssss')
+  const [notMatched, setNotmatched]= useState<any[]>(['a'])
+  // const [filtered, setFiltered]=useState<any>(null)
+
+// console.log(filtered, 'insideFiltesssssssssssssssssssssssssss')
 // debugger
 
 
@@ -90,8 +89,10 @@ console.log(filtered, 'insideFiltesssssssssssssssssssssssssss')
     feature.forEach(element => {
       featured_nfts.push(element.nft_id);
     });
+    // debugger
     setMyArray([]);
     setFeaturedNFT([]);
+    // filtered(null)
     console.log('auctionsssss', auctions);
     auctions.forEach(auction => {
       const mintId = auction.thumbnail.metadata.info.mint;
@@ -118,26 +119,33 @@ console.log(filtered, 'insideFiltesssssssssssssssssssssssssss')
       // }
     });
   };
-
+  // const ids = featuredNft.map(auction => auction.thumbnail.metadata.info.data.name)
+  // // const filtered=featuredNft.filter(({name}, index) => !ids.includes(name, index + 1))
+  // console.log('filtered',filtered);
+  
   useEffect(() => {
+    // debugger;
+
     getNFTData();
     setFocused();
-    setTimeout(() => {
-      // fetchTile();
-      // getstate();
-    }, 5000);
-  }, [auctions]);
+ 
+  }, [auctions,focus, feature]);
   const didMountRef = useRef(true);
-  useEffect(() => {
-    const { pathname } = location;
-    setCurrentPath(pathname);
-    if (didMountRef.current) {
-      // debugger;
 
-      getNFTData();
-    }
-    didMountRef.current = false;
-  }, [feature, art]);
+  // useEffect(() => {
+  //   // const { pathname } = location;
+  //   // setCurrentPath(pathname);
+  //   debugger;
+
+  //   if (didMountRef.current) {
+  //     // debugger;
+
+  //     getNFTData();
+  //         setFocused();
+
+  //   }
+  //   didMountRef.current = false;
+  // }, [focus, feature]);
 
   const getstate = () => {
     setTimeout(async () => {
@@ -151,12 +159,14 @@ console.log(filtered, 'insideFiltesssssssssssssssssssssssssss')
   const setFocused = async () => {
     console.log('setFocused');
     console.log('auctions', auctions);
+    setFeaturedNFT([]);
     // auctions?.[3]?.thumbnail?.metadata?.info?.data?.name
     auctions.forEach(auction => {
       const mintId = auction.thumbnail.metadata.info.mint;
       console.log('focused.nft_id', focus?.[0].nft_id);
       console.log('mintId', mintId);
-
+      // debugger
+      if (focus  !== null){
       if (focus[0].nft_id == mintId) {
         console.log('auction', auction);
         setFocusedNFT(auction);
@@ -167,12 +177,13 @@ console.log(filtered, 'insideFiltesssssssssssssssssssssssssss')
         if (feature[a].nft_id == mintId) {
           
           setFeaturedNFT(arr => [...arr, auction]);
+          
         }
-        // else {
-            
-        //   setNotmatched(arr=>[...arr,auction])
-        // }
-      }
+        else {
+          // debugger
+          setNotmatched(prev=>[...prev,auction]);
+        }
+      }}
     });
   };
 
@@ -578,41 +589,42 @@ console.log(filtered, 'insideFiltesssssssssssssssssssssssssss')
               <span>🔥</span> Featured
             </h5>
             <Row>
-              <div
-                className={
-                  myArray.length == 1
-                    ? 'artwork-grid col-4 h-25 ps-5'
-                    : '' +
-                      (myArray.length == 2 
-                        ? 'artwork-grid col-8 h-25 ps-5' 
-                        : '') +
-                      (myArray.length > 2 || featuredNft.length >0
-                        ? 'artwork-grid col-12 h-25 ps-5'
-                        : '')
-                        
-                }
-              >
-                {!isLoading &&
-                  filtered.map(auction => (
-                    <>
-                    {console.log(auction, 'insideAuctionsss')}
-                    <AuctionRenderCard
-                      auctionView={auction}
-                      key={auction.auction.pubkey}
-                    />
-                    </>
-                  ))}
-                {isLoading &&
-                  [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
-                {!isLoading &&
-                  myArray.map(auction => (
-                    <AuctionRenderCard
-                      auctionView={auction}
-                      key={auction.auction.pubkey}
-                    />
-                    // </Link>
-                  ))}
-              </div>
+              {/* {filtered && */}
+            <div
+            className={
+              myArray.length == 1 
+                ? 'artwork-grid col-4 h-25 ps-5'
+                : '' +
+                  (myArray.length == 2 || featuredNft.length ==2
+                    ? 'artwork-grid col-8 h-25 ps-5' 
+                    : '') +
+                  (myArray.length > 2 || featuredNft.length > 2
+                    ? 'artwork-grid col-12 h-25 ps-5'
+                    : '')
+                    
+            }
+          >
+            
+            {!isLoading &&
+              featuredNft.map(auction => (               
+                <AuctionRenderCard
+                  auctionView={auction}
+                  key={auction.auction.pubkey}
+                />
+              ))}
+            {isLoading &&
+              [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
+            {!isLoading &&
+              myArray.map(auction => (
+                <AuctionRenderCard
+                  auctionView={auction}
+                  key={auction.auction.pubkey}
+                />
+                // </Link>
+              ))}
+          </div>
+             {/* } */}
+              
             </Row>
           </Col>
         </Content>
