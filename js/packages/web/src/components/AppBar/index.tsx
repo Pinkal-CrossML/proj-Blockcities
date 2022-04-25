@@ -44,7 +44,7 @@ const getDefaultLinkActions = (connected: boolean ) => {
     <Link className='nav-back-icon' to={`/`} key={'explore'} >
       <div className='ms-5'>
       <img style={{width: '12%'}} src={'/market.png'} />
-    <Button className="app-btn nave-list fs-5 fw-normal mb-3  "onClick={refreshPage} >Marketplace</Button>
+    <Button className="app-btn nave-list fs-5 fw-normal mb-3  " >Marketplace</Button>
     
       </div>
       

@@ -19,7 +19,7 @@ import {
 } from '../../../../components/CurrentUserBadge';
 import { AuctionCard } from '../../../../components/AuctionCard';
 import { useArt } from '../../../../hooks';
-import { useAuctionStatus } from '../../../../components/AuctionRenderCard/hooks/useAuctionStatus'
+import { useAuctionStatus } from '../../../../components/AuctionRenderCard/hooks/useAuctionStatus';
 import { AmountLabel } from '../../../../components/AmountLabel';
 const { TabPane } = Tabs;
 import mapboxgl from 'mapbox-gl';
@@ -45,31 +45,44 @@ export const SalesListView = (props: any) => {
   const [feature, setFeatured] = useState<any>(null);
   const [featuredNft, setFeaturedNFT] = useState<any>([]);
   const [myArray, setMyArray] = useState<any[]>([]);
-  const [tileId, setTileid]=useState<any>(null)
-  const [desc, setDesc]= useState<any>('')
- const [image, setImage]= useState<any>('')
+  const [tileId, setTileid] = useState<any>(null);
+  const [desc, setDesc] = useState<any>('');
+  const [image, setImage] = useState<any>('');
+  const [currentPath, setCurrentPath] = useState(location.pathname);
+const [notMatched, setNotmatched]= useState<any>()
   
+// const ids = featuredNft.map(auction => auction.thumbnail.metadata.info.data.name)
+// const filtered = featuredNft.filter(({name}, index) => !ids.includes(name, index + 1))
+// console.log(filtered, 'insideFiltedddddddddddddddd')
+// debugger
+
+
   const id = focusedNFT?.thumbnail?.metadata?.pubkey;
   const art = useArt(id);
   const name = art?.title || ' ';
   // const uri= focusedNFT?.thumbnail?.metadata?.info?.data?.uri
-  const url:string|any= art?.uri
-  
-  const price= focusedNFT?.auction.info.priceFloor.minPrice.words[1]
+  const url: string | any = art?.uri;
+  if(url!=''){
+    window.sessionStorage.setItem('url', url);
+  }
+ 
+  const price = focusedNFT?.auction.info.priceFloor.minPrice.words[1];
   // const { status, amount } = useAuctionStatus(focusedNFT);
-    console.log('art',art);
-   
+  // console.log('art', art);
 
-    const reverseGeocoding = async (latlong) => {
-      // debugger
-      const token='pk.eyJ1IjoiamFnZGlzaDEyMSIsImEiOiJja3VhNmg1eHcwYWx3MnFteGdueXdlNGVmIn0.-TCYcPKARKOYmOJ5wFDETg'
-      // mapboxgl.accessToken =
-      // 'pk.eyJ1IjoiamFnZGlzaDEyMSIsImEiOiJja3VhNmg1eHcwYWx3MnFteGdueXdlNGVmIn0.-TCYcPKARKOYmOJ5wFDETg';
-      return await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${latlong[1]},${latlong[0]}.json?access_token=${token};`).then(response =>{ console.log(response);
-      })
-    }
+  const reverseGeocoding = async latlong => {
+    // debugger
+    const token =
+      'pk.eyJ1IjoiamFnZGlzaDEyMSIsImEiOiJja3VhNmg1eHcwYWx3MnFteGdueXdlNGVmIn0.-TCYcPKARKOYmOJ5wFDETg';
 
-
+    return await axios
+      .get(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${latlong[1]},${latlong[0]}.json?access_token=${token};`,
+      )
+      .then(response => {
+        console.log(response);
+      });
+  };
 
   const activateLasers = filter_type => {
     var featured_nfts: any = [];
@@ -77,30 +90,30 @@ export const SalesListView = (props: any) => {
       featured_nfts.push(element.nft_id);
     });
     setMyArray([]);
-    setFeaturedNFT([])
+    setFeaturedNFT([]);
     console.log('auctionsssss', auctions);
     auctions.forEach(auction => {
       const mintId = auction.thumbnail.metadata.info.mint;
       // if (featured_nfts.includes(mintId)) {
-        console.log(mintId);
-        // debugger;
-        const artUri = auction.thumbnail.metadata.info.data.uri;
-        const fetchMeta = async () => {
-          await fetch(artUri)
-            .then(res => res.json())
-            .then(data => {
-              const attr = data.attributes;
-              console.log('attr', attr);
-              newdata = attr.filter(e => e.value.includes(filter_type));
-              console.log('newdata.length', newdata.length);
+      console.log(mintId);
+      // debugger;
+      const artUri = auction.thumbnail.metadata.info.data.uri;
+      const fetchMeta = async () => {
+        await fetch(artUri)
+          .then(res => res.json())
+          .then(data => {
+            const attr = data.attributes;
+            console.log('attr', attr);
+            newdata = attr.filter(e => e.value.includes(filter_type));
+            console.log('newdata.length', newdata.length);
 
-              if (newdata.length > 0) {
-                setMyArray(arr => [...arr, auction]);
-                console.log('myArray', myArray);
-              }
-            });
-        };
-        fetchMeta();
+            if (newdata.length > 0) {
+              setMyArray(arr => [...arr, auction]);
+              console.log('myArray', myArray);
+            }
+          });
+      };
+      fetchMeta();
       // }
     });
   };
@@ -109,22 +122,30 @@ export const SalesListView = (props: any) => {
     getNFTData();
     setFocused();
     setTimeout(() => {
-      fetchTile()
-      getstate()
+      // fetchTile();
+      // getstate();
     }, 5000);
-    
   }, [auctions]);
+  const didMountRef = useRef(true);
+  useEffect(() => {
+    const { pathname } = location;
+    setCurrentPath(pathname);
+    if (didMountRef.current) {
+      // debugger;
 
+      getNFTData();
+    }
+    didMountRef.current = false;
+  }, [feature, art]);
 
-  const getstate=()=>{
-    setTimeout(async() => {
-      const tileEle= document.getElementsByClassName('TILE')[0].innerHTML
-          const tile=h3ToGeo(tileEle)
-          // debugger
-         await reverseGeocoding(tile)
+  const getstate = () => {
+    setTimeout(async () => {
+      const tileEle = document.getElementsByClassName('TILE')[0].innerHTML;
+      const tile = h3ToGeo(tileEle);
+      // debugger
+      await reverseGeocoding(tile);
     }, 10000);
-  }
-
+  };
 
   const setFocused = async () => {
     console.log('setFocused');
@@ -140,24 +161,45 @@ export const SalesListView = (props: any) => {
         setFocusedNFT(auction);
       }
       // debugger;
+      
       for (let a in feature) {
         if (feature[a].nft_id == mintId) {
+          
           setFeaturedNFT(arr => [...arr, auction]);
         }
+        // else {
+            
+        //   setNotmatched(arr=>[...arr,auction])
+        // }
       }
     });
   };
 
+  // var desc;
+  const fetchTile = async () => {
+    const geturl: any = window.sessionStorage.getItem('url');
+    if (url == '') {
+      await axios.get(geturl).then(res => {
+        console.log('tile', res.data);
+        // debugger;
+        setTileid(res.data.attributes[0].value);
+        setDesc(res.data.description);
+        setImage(res.data.image);
+      });
+    } else {
+      await axios.get(url).then(res => {
+        console.log('tile', res.data);
+        // debugger;
+        setTileid(res.data.attributes[0].value);
+        setDesc(res.data.description);
+        setImage(res.data.image);
+      });
+    }
+  };
+  // console.log('tileId',tileId);
+  // console.log('desc',desc);
 
-// var desc;
-  const fetchTile=async()=>{
-await axios.get(url).then(res=>{console.log('tile',res.data);setTileid(res.data.attributes[0].value) ;setDesc(res.data.description);setImage(res.data.image)}) 
-
-}
-// console.log('tileId',tileId);
-// console.log('desc',desc);
-
-
+  
   const getNFTData = async () => {
     const nfts: any[] = [];
     const headers = {
@@ -172,10 +214,12 @@ await axios.get(url).then(res=>{console.log('tile',res.data);setTileid(res.data.
       )
       .then(data => {
         nfts.push(data.data.Items);
+        // debugger
         focused = nfts[0].filter(e => e.focused_nft.includes('True'));
         setFocus(focused);
         featured = nfts[0].filter(e => e.featured_nft.includes('True'));
         setFeatured(featured);
+        fetchTile();
       });
   };
 
@@ -192,7 +236,7 @@ await axios.get(url).then(res=>{console.log('tile',res.data);setTileid(res.data.
         <Content style={{ display: 'flex', flexWrap: 'wrap' }}>
           <Col style={{ width: '100%', marginTop: 0 }}>
             <Row></Row>
-                       {/* <div>
+            {/* <div>
                           {focusedNFT && (
                             <AuctionRenderCard
                               auctionView={focusedNFT}
@@ -205,9 +249,7 @@ await axios.get(url).then(res=>{console.log('tile',res.data);setTileid(res.data.
             <div className="col-12 pe-5 ">
               <div className="row g-5 top-section">
                 <div className="col-12 col-sm-12 col-md-6">
-                  <div
-                    className="card mb-4 px-2 card-main "
-                  >
+                  <div className="card mb-4 px-2 card-main ">
                     <div className="row  no-gutters card-one">
                       <div className="col-md-6 p-4 ">
                         <img src={image} className="card-img h-100" alt="..." />
@@ -230,13 +272,13 @@ await axios.get(url).then(res=>{console.log('tile',res.data);setTileid(res.data.
                               </h5>
                             </div>
                           </div>
-                          
+
                           <div className="row gx-0">
                             <button className=" citybtn w-50 btn py-2 my-3 ">
                               <h5 className="m-0 fw-bold citybtn-text text-center">
                                 {name}
                               </h5>
-                             </button>
+                            </button>
                           </div>
                           <div className="row gx-0">
                             <p className=" text-light  offset-2  my-2">
@@ -249,26 +291,22 @@ await axios.get(url).then(res=>{console.log('tile',res.data);setTileid(res.data.
                               United states
                             </p>
                           </div>
-                          
 
                           <div className="row gx-0  mb-3">
                             <div className="col-md-5">
                               <p className="light-blue fs-5 mb-2">
                                 Available For
                               </p>
-                              {focusedNFT && 
-                              <h4 className="sol mb-0">{price} SOL</h4>
-                              }
-                              
+                              {focusedNFT && (
+                                <h4 className="sol mb-0">{price} SOL</h4>
+                              )}
                             </div>
                             <div className="col-md-5  place-bid text-center">
                               <button
                                 type="button"
                                 className="btn btn-rounded p-0"
                               >
-                                <div
-                                  className="text-white m-0 p-2 fw-bold"
-                                >
+                                <div className="text-white m-0 p-2 fw-bold">
                                   Place Bid
                                 </div>
                               </button>
@@ -293,9 +331,7 @@ await axios.get(url).then(res=>{console.log('tile',res.data);setTileid(res.data.
                           <h5 className="text-white fs-6">Details</h5>
                         </button>
                       </div>
-                      <p className=" text-white mt-3 ms-4 me-5">
-                       {desc}
-                      </p>
+                      <p className=" text-white mt-3 ms-4 me-5">{desc}</p>
                       <div className="place-bid-two-next text-center mt-2 pb-0">
                         <button
                           type="button"
@@ -543,39 +579,38 @@ await axios.get(url).then(res=>{console.log('tile',res.data);setTileid(res.data.
             <Row>
               <div
                 className={
-                  myArray.length == 1 
+                  myArray.length == 1
                     ? 'artwork-grid col-4 h-25 ps-5'
                     : '' +
                       (myArray.length == 2 
-                        ? 'artwork-grid col-8 h-25 ps-5'
+                        ? 'artwork-grid col-8 h-25 ps-5' 
                         : '') +
-                      (myArray.length > 2 || featuredNft.length>2
+                      (myArray.length > 2 || featuredNft.length >0
                         ? 'artwork-grid col-12 h-25 ps-5'
                         : '')
-                       
                         
                 }
               >
                 {!isLoading &&
                   featuredNft.map(auction => (
+                    <>
+                    {console.log(auction, 'insideAuctionsss')}
                     <AuctionRenderCard
-                  
                       auctionView={auction}
                       key={auction.auction.pubkey}
                     />
+                    </>
                   ))}
                 {isLoading &&
                   [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
                 {!isLoading &&
                   myArray.map(auction => (
-                  
                     <AuctionRenderCard
                       auctionView={auction}
                       key={auction.auction.pubkey}
                     />
                     // </Link>
                   ))}
-               
               </div>
             </Row>
           </Col>
