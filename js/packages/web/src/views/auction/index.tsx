@@ -87,7 +87,6 @@ export const AuctionItem = ({
     // background: 'black',
     // boxShadow: 'rgb(0 0 0 / 10%) 12px 2px 20px 14px',
     aspectRatio: '2/1',
-    
   };
   return (
     <ArtContent
@@ -518,14 +517,12 @@ export const AuctionView = () => {
       const tile = document.getElementsByClassName('tileId')[0].innerText;
       const url: string | Location = `http://localhost:3001/?tile_id=${tile}`;
       window.open(url);
-
-
     };
 
     const checkShowDetails = () => {
-      setCheck(true)
+      setCheck(true);
     };
-    
+
     return (
       <Row ref={ref} gutter={[48, 0]}>
         <Col className={'col-6 col-md-12 col-sm-12 col-lg-6 img-cont-300 ps-3'}>
@@ -653,7 +650,7 @@ export const AuctionView = () => {
                   Metadata
                 </p>
               </div>
-              
+
               {/* <div className="text-end">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -671,7 +668,6 @@ export const AuctionView = () => {
                   />
                 </svg>
               </div> */}
-              
 
               {/* {
                 check &&
@@ -700,7 +696,6 @@ export const AuctionView = () => {
                   ))}
                 </List>
               )}
-
             </div>
           </div>
         </div>
@@ -711,44 +706,43 @@ export const AuctionView = () => {
               <h5 className="text-white fs-6 p-2 pb-0 mx-4 text-center">
                 Get Connected
               </h5>
-                 
-              {!connected && (
-                        <ConnectButton
-                          className="place-bid-two text-center ms-4 border-0 "
-                          style={{ height: 48 }}
-                          allowWalletChange
-                        />
-                      )}
-                      {connected && (
-                        <>
-                          <CurrentUserBadge
-                            showBalance={false}
-                            showAddress={true}
-                            iconSize={24}
-                          />
 
-                        </>
-                      )}
+              {!connected && (
+                <ConnectButton
+                  className="place-bid-two text-center ms-4 border-0 "
+                  style={{ height: 48 }}
+                  allowWalletChange
+                />
+              )}
+              {connected && (
+                <>
+                  <CurrentUserBadge
+                    showBalance={false}
+                    showAddress={true}
+                    iconSize={24}
+                  />
+                </>
+              )}
               {/* <div className="place-bid-two text-center mt-3 pb-0">
                 <button type="button" className=" btn btn-rounded  pt-3 pb-1">
                   <h5 className="text-white">Connect Wallet</h5>
                 </button>
               </div> */}
 
-              <div className="place-bid-two-next text-center mt-4 pb-0">
-                <Link to={`/`} key={'explore'}>
+              <div className="place-bid-two-next place-bid-two-next-hover text-center mt-4 pb-0">
+                <Link to={``} key={'explore'}>
                   <button
                     type="button"
-                    className="text-white costom btn btn-rounded pt-3 "
+                    className="text-white  btn btn-rounded pt-3 "
                   >
-                    <h5 className="text-white">How it Works</h5>
+                    <h5 className="text-white fs-6">How it Works</h5>
                   </button>
                 </Link>
               </div>
 
-              <div className="place-bid-two-next text-center mt-4 mb-3">
-                <button type="button" className="costom btn btn-rounded pt-3 ">
-                  <h5 className="text-white">Tiles Available</h5>
+              <div className="place-bid-two-next  place-bid-two-next-hover text-center mt-4 pb-0">
+                <button type="button" className=" btn btn-rounded pt-3 ">
+                  <h5 className="text-white fs-6">Tiles Available</h5>
                 </button>
               </div>
             </div>
@@ -764,7 +758,11 @@ export const AuctionView = () => {
               />
             </div>
 
-            <img className="map-avrat-logo" src={'/map-logo.png'}style={{zIndex: '2'}}  />
+            <img
+              className="map-avrat-logo"
+              src={'/map-logo.png'}
+              style={{ zIndex: '2' }}
+            />
 
             <div
               className="position-absolute w-25 pt-3 pe-5"
@@ -1061,7 +1059,6 @@ export const AuctionBids = ({
             View full history
           </div>
         )}
-        
         <MetaplexModal
           visible={showHistoryModal}
           onCancel={() => setShowHistoryModal(false)}

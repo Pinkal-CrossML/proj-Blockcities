@@ -51,10 +51,11 @@ export const SalesListView = (props: any) => {
   const [currentPath, setCurrentPath] = useState(location.pathname);
 const [notMatched, setNotmatched]= useState<any>()
   
-// const ids = featuredNft.map(auction => auction.thumbnail.metadata.info.data.name)
-// const filtered = featuredNft.filter(({name}, index) => !ids.includes(name, index + 1))
-// console.log(filtered, 'insideFiltedddddddddddddddd')
+const ids = featuredNft.map(auction => auction.thumbnail.metadata.info.data.name)
+const filtered = featuredNft.filter(({name}, index) => !ids.includes(name, index + 1))
+console.log(filtered, 'insideFiltesssssssssssssssssssssssssss')
 // debugger
+
 
 
   const id = focusedNFT?.thumbnail?.metadata?.pubkey;
@@ -592,7 +593,7 @@ const [notMatched, setNotmatched]= useState<any>()
                 }
               >
                 {!isLoading &&
-                  featuredNft.map(auction => (
+                  filtered.map(auction => (
                     <>
                     {console.log(auction, 'insideAuctionsss')}
                     <AuctionRenderCard
