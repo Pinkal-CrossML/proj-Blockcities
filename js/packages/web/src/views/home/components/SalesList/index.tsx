@@ -10,17 +10,9 @@ import { HowToBuyModal } from '../../../../components/HowToBuyModal';
 import { ConnectButton } from '@oyster/common';
 import { useAuctionsList } from './hooks/useAuctionsList';
 import { AuctionRenderCard } from '../../../../components/AuctionRenderCard';
-import { Notifications } from '../../../../components/Notifications';
 import { h3ToGeo } from 'h3-js';
-import {
-  Cog,
-  CurrentUserBadge,
-  CurrentUserBadgeMobile,
-} from '../../../../components/CurrentUserBadge';
-import { AuctionCard } from '../../../../components/AuctionCard';
+import { CurrentUserBadge } from '../../../../components/CurrentUserBadge';
 import { useArt } from '../../../../hooks';
-import { useAuctionStatus } from '../../../../components/AuctionRenderCard/hooks/useAuctionStatus';
-import { AmountLabel } from '../../../../components/AmountLabel';
 const { TabPane } = Tabs;
 import mapboxgl from 'mapbox-gl';
 import { geoToH3 } from 'h3-js';
@@ -48,39 +40,35 @@ export const SalesListView = (props: any) => {
   const [tileId, setTileid] = useState<any>(null);
   const [desc, setDesc] = useState<any>('');
   const [image, setImage] = useState<any>('');
-  const [currentPath, setCurrentPath] = useState(location.pathname);
-  const [notMatched, setNotmatched]= useState<any[]>(['a'])
-  // const [filtered, setFiltered]=useState<any>(null)
-
-// console.log(filtered, 'insideFiltesssssssssssssssssssssssssss')
-// debugger
-
-
-
+  const [notMatched, setNotmatched] = useState<any[]>(['a']);
+  const [statename, setStatename] = useState<any>('');
+  const [countryName, setCountry] = useState<any>('');
   const id = focusedNFT?.thumbnail?.metadata?.pubkey;
   const art = useArt(id);
   const name = art?.title || ' ';
-  // const uri= focusedNFT?.thumbnail?.metadata?.info?.data?.uri
   const url: string | any = art?.uri;
-  if(url!=''){
+  if (url != '') {
     window.sessionStorage.setItem('url', url);
   }
- 
+
   const price = focusedNFT?.auction.info.priceFloor.minPrice.words[1];
-  // const { status, amount } = useAuctionStatus(focusedNFT);
-  // console.log('art', art);
 
   const reverseGeocoding = async latlong => {
-    // debugger
     const token =
       'pk.eyJ1IjoiamFnZGlzaDEyMSIsImEiOiJja3VhNmg1eHcwYWx3MnFteGdueXdlNGVmIn0.-TCYcPKARKOYmOJ5wFDETg';
 
     return await axios
       .get(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${latlong[1]},${latlong[0]}.json?access_token=${token};`,
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${latlong[1]},${latlong[0]}.json?access_token=` +
+          token,
       )
       .then(response => {
-        console.log(response);
+        console.log(response.data.features[4].text);
+        const state = response.data.features[4].text;
+        setStatename(state)
+        console.log(response.data.features[5].text);
+        const country = response.data.features[5].text;
+        setCountry(country)
       });
   };
 
@@ -89,63 +77,43 @@ export const SalesListView = (props: any) => {
     feature.forEach(element => {
       featured_nfts.push(element.nft_id);
     });
-    // debugger
     setMyArray([]);
     setFeaturedNFT([]);
-    // filtered(null)
-    console.log('auctionsssss', auctions);
     auctions.forEach(auction => {
-      const mintId = auction.thumbnail.metadata.info.mint;
-      // if (featured_nfts.includes(mintId)) {
-      console.log(mintId);
-      // debugger;
       const artUri = auction.thumbnail.metadata.info.data.uri;
       const fetchMeta = async () => {
         await fetch(artUri)
           .then(res => res.json())
           .then(data => {
             const attr = data.attributes;
-            console.log('attr', attr);
             newdata = attr.filter(e => e.value.includes(filter_type));
-            console.log('newdata.length', newdata.length);
 
             if (newdata.length > 0) {
               setMyArray(arr => [...arr, auction]);
-              console.log('myArray', myArray);
             }
           });
       };
       fetchMeta();
-      // }
     });
   };
-  // const ids = featuredNft.map(auction => auction.thumbnail.metadata.info.data.name)
-  // // const filtered=featuredNft.filter(({name}, index) => !ids.includes(name, index + 1))
-  // console.log('filtered',filtered);
-  
-  useEffect(() => {
-    // debugger;
 
+  useEffect(() => {
     getNFTData();
     setFocused();
- 
-  }, [auctions,focus, feature]);
+  }, [auctions]);
+
   const didMountRef = useRef(true);
 
-  // useEffect(() => {
-  //   // const { pathname } = location;
-  //   // setCurrentPath(pathname);
-  //   debugger;
+  useEffect(() => {
+    if (didMountRef.current) {
+      // debugger;
 
-  //   if (didMountRef.current) {
-  //     // debugger;
-
-  //     getNFTData();
-  //         setFocused();
-
-  //   }
-  //   didMountRef.current = false;
-  // }, [focus, feature]);
+      getNFTData();
+      setFocused();
+      getstate();
+    }
+    didMountRef.current = false;
+  }, [focus, feature]);
 
   const getstate = () => {
     setTimeout(async () => {
@@ -157,61 +125,41 @@ export const SalesListView = (props: any) => {
   };
 
   const setFocused = async () => {
-    console.log('setFocused');
-    console.log('auctions', auctions);
     setFeaturedNFT([]);
-    // auctions?.[3]?.thumbnail?.metadata?.info?.data?.name
     auctions.forEach(auction => {
       const mintId = auction.thumbnail.metadata.info.mint;
-      console.log('focused.nft_id', focus?.[0].nft_id);
-      console.log('mintId', mintId);
-      // debugger
-      if (focus  !== null){
-      if (focus[0].nft_id == mintId) {
-        console.log('auction', auction);
-        setFocusedNFT(auction);
+      if (focus !== null) {
+        if (focus[0].nft_id == mintId) {
+          setFocusedNFT(auction);
+        }
+        for (let a in feature) {
+          if (feature[a].nft_id == mintId) {
+            setFeaturedNFT(arr => [...arr, auction]);
+          } else {
+            setNotmatched(prev => [...prev, auction]);
+          }
+        }
       }
-      // debugger;
-      
-      for (let a in feature) {
-        if (feature[a].nft_id == mintId) {
-          
-          setFeaturedNFT(arr => [...arr, auction]);
-          
-        }
-        else {
-          // debugger
-          setNotmatched(prev=>[...prev,auction]);
-        }
-      }}
     });
   };
 
-  // var desc;
   const fetchTile = async () => {
     const geturl: any = window.sessionStorage.getItem('url');
     if (url == '') {
       await axios.get(geturl).then(res => {
-        console.log('tile', res.data);
-        // debugger;
         setTileid(res.data.attributes[0].value);
         setDesc(res.data.description);
         setImage(res.data.image);
       });
     } else {
       await axios.get(url).then(res => {
-        console.log('tile', res.data);
-        // debugger;
         setTileid(res.data.attributes[0].value);
         setDesc(res.data.description);
         setImage(res.data.image);
       });
     }
   };
-  // console.log('tileId',tileId);
-  // console.log('desc',desc);
 
-  
   const getNFTData = async () => {
     const nfts: any[] = [];
     const headers = {
@@ -226,7 +174,6 @@ export const SalesListView = (props: any) => {
       )
       .then(data => {
         nfts.push(data.data.Items);
-        // debugger
         focused = nfts[0].filter(e => e.focused_nft.includes('True'));
         setFocus(focused);
         featured = nfts[0].filter(e => e.featured_nft.includes('True'));
@@ -248,15 +195,6 @@ export const SalesListView = (props: any) => {
         <Content style={{ display: 'flex', flexWrap: 'wrap' }}>
           <Col style={{ width: '100%', marginTop: 0 }}>
             <Row></Row>
-            {/* <div>
-                          {focusedNFT && (
-                            <AuctionRenderCard
-                              auctionView={focusedNFT}
-                              key={focusedNFT.auction.pubkey}
-                              
-                            />
-                          )}
-                        </div> */}
 
             <div className="col-12 pe-5 ">
               <div className="row g-5 top-section">
@@ -294,13 +232,13 @@ export const SalesListView = (props: any) => {
                           </div>
                           <div className="row gx-0">
                             <p className=" text-light  offset-2  my-2">
-                              California.
+                             {statename}
                             </p>
                           </div>
 
                           <div className="row gx-0">
                             <p className=" text-light  offset-2  my-2">
-                              United states
+                              {countryName}
                             </p>
                           </div>
 
@@ -352,8 +290,9 @@ export const SalesListView = (props: any) => {
                           <h5 className="text-white fs-6">Metadata</h5>
                         </button>
                       </div>
+                      <p className='text-white'>Tile ID:</p> 
                       <p className="text-white mt-3 fs-6 mb-4 ms-4 me-4 TILE">
-                        Tile ID: {tileId}
+                        {tileId}
                       </p>
                     </div>
                   </div>
@@ -407,92 +346,6 @@ export const SalesListView = (props: any) => {
                 </div>
               </div>
 
-              {/* nft cards  */}
-
-              {/* <div className="col-2 Connected ">
-                <div className='card border'>
-                <div className="card-body top-cards">
-                      <p className="card-text">
-                        <img className="glax rounded" src={'/white.jpg'} />
-                        
-                      </p>
-                      <div className='text-white pb-2'>
-                      Florida
-                      </div>
-                      
-                      <h5 className=" fs-5 sol-color" >
-                        <div className=''></div> 300 SOL</h5>
-                        <div className='text-primary h-25'>
-                        <hr style={{height: '3px'}}/>
-                      </div>
-                    
-                      
-                      <h5 className="fs-5 sol-color">See Details</h5>
-                    </div>
-                  </div>
-                </div> */}
-
-              {/* nft card send */}
-
-              {/* display card  */}
-
-              {/* <div className="col-3 Connected  pt-4">
-                <div className='card border'>
-                  <div className="card-body pb-5 ">
-                    <h5 className="text-white fs-6 p-2 pb-3 mx-4 text-center">Display in Map</h5>
-                    <div className="Virtual-Land text-center mt-3 pb-0 w-75 ">
-                      <button
-                        type="button"
-                        className=" btn btn-rounded  pt-2 pb-1"
-                      >
-                        <h5 className='text-white fw-normal fs-6'>Virtual Land</h5> 
-                      </button>
-                    </div>
-                    <div className=" text-center mt-2 pb-0  ">
-                    <Link
-                className="white-grad-o me-5 ms-5 mt-4 fw-normal fs-6 w-75"
-                
-                to={`/auction/`}
-              >
-                Available Assets
-              </Link>
-                    </div>
-                    <div className=" text-center mt-2 pb-0  ">
-                    <Link
-                className="white-grad-o me-5 ms-5 fw-normal mt-4 fs-6 w-75"
-               
-                to={`/auction/`}
-              >
-                Proposed Upgrades
-              </Link>
-                    </div>
-                    <div className=" text-center mt-2 pb-0  ">
-                    <Link
-                className="white-grad-o me-5 ms-5 fw-normal mt-4 fs-6 w-75"
-             
-                to={`/auction/`}
-              >
-                Architecture
-              </Link>
-                    </div>
-                    <div className=" text-center mt-2 pb-0  ">
-                    <Link
-                className="white-grad-o me-5 ms-5 mt-4 fw-normal fs-6 w-75"
-             
-                to={`/auction/`}
-              >
-                Art
-              </Link>
-                    </div>
-                 
-                
-                    </div>
-                  </div>
-                </div>
-               */}
-
-              {/* display card end */}
-
               {props.children}
             </div>
             <div className="">
@@ -515,7 +368,7 @@ export const SalesListView = (props: any) => {
                         className="bg-transparent border-0"
                         onClick={() => activateLasers('FeaturedCities')}
                       >
-                        <h5 className="text-white fs-6">Featured Cities</h5>
+                        <h5 className="text-white fs-6 ">Featured Cities</h5>
                       </button>
                     </div>
 
@@ -589,42 +442,46 @@ export const SalesListView = (props: any) => {
               <span>🔥</span> Featured
             </h5>
             <Row>
-              {/* {filtered && */}
-            <div
-            className={
-              myArray.length == 1 
-                ? 'artwork-grid col-4 h-25 ps-5'
-                : '' +
-                  (myArray.length == 2 || featuredNft.length ==2
-                    ? 'artwork-grid col-8 h-25 ps-5' 
-                    : '') +
-                  (myArray.length > 2 || featuredNft.length > 2
-                    ? 'artwork-grid col-12 h-25 ps-5'
-                    : '')
-                    
-            }
-          >
-            
-            {!isLoading &&
-              featuredNft.map(auction => (               
-                <AuctionRenderCard
-                  auctionView={auction}
-                  key={auction.auction.pubkey}
-                />
-              ))}
-            {isLoading &&
-              [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
-            {!isLoading &&
-              myArray.map(auction => (
-                <AuctionRenderCard
-                  auctionView={auction}
-                  key={auction.auction.pubkey}
-                />
-                // </Link>
-              ))}
-          </div>
-             {/* } */}
-              
+              <div
+                className={
+                  myArray.length == 1
+                    ? 'artwork-grid col-4 h-25 ps-5'
+                    : '' +
+                      (myArray.length == 2 || featuredNft.length == 2
+                        ? 'artwork-grid col-8 h-25 ps-5'
+                        : '') +
+                      (myArray.length > 2 || featuredNft.length > 2
+                        ? 'artwork-grid col-12 h-25 ps-5'
+                        : '')
+                }
+              >
+                {!isLoading &&
+                  featuredNft.map(auction => (
+                    <AuctionRenderCard
+                      auctionView={auction}
+                      key={auction.auction.pubkey}
+                    />
+                  ))}
+                {isLoading &&
+                  [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
+                {!isLoading &&
+                  myArray.map(auction => (
+                    <AuctionRenderCard
+                      auctionView={auction}
+                      key={auction.auction.pubkey}
+                    />
+                  ))}
+
+                {/* {isLoading &&
+                  [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
+                {!isLoading &&
+                  auctions.map(auction => (
+                    <AuctionRenderCard
+                      auctionView={auction}
+                      key={auction.auction.pubkey}
+                    />
+                  ))} */}
+              </div>
             </Row>
           </Col>
         </Content>

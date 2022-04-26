@@ -65,7 +65,7 @@ const getDefaultLinkActions = (connected: boolean ) => {
       
       <div className='ms-5'>
       <img style={{width: '12%'}}  src={'/Vector.png'} />
-      <Button className="app-btn nave-list fs-5 fw-normal mb-3">{connected ? 'My Wallet' : 'Artwork'}</Button>
+      <Button className="app-btn nave-list fs-5 fw-normal mb-3">{connected ? 'My Wallet' : 'Artwork'}</Button> 
       </div>
       
     </Link>,
